@@ -11,6 +11,7 @@ t_specs	*set_specs(char *path)
 	specs = allocate_memory(0, SPECS, type);
 	specs->rows = 0;
 	parse_cub_file_specs(path, specs, type);
+	check_specs(specs);
 	return (specs);
 }
 
@@ -29,6 +30,11 @@ void	parse_cub_file_specs(char *path, t_specs *specs, t_type *type)
 	int		fd;
 
 	fd = open(path, O_RDONLY);
+	if (fd < 0)
+	{
+		printf("Error: cannot open the file.");
+		exit(0);
+	}
 	line = get_next_line(fd);
 	while (line)
 	{
@@ -73,12 +79,60 @@ void	check_line(char *line, t_specs *specs, t_type *type)
 	{
 		specs->floor_spec = get_path(line, specs->floor_spec, type, 0);
 		printf("checking floor_spec: %s\n", specs->floor_spec);
+		get_rgb(specs->floor_spec, &specs->floor, type);
 	}
 	else if (line[i] == 'C' && line[i + 1] == 32)
 	{
 		specs->ceil_spec = get_path(line, specs->ceil_spec, type, 0);
-		printf("checking ceil_spec: %s\n", specs->ceil_spec);
+		get_rgb(specs->ceil_spec, &specs->ceil, type);
 	}
+}
+
+void	get_rgb(char *str, t_rgb **rgb, t_type *type)
+{
+	int		i;
+	char	temp[4];
+	int		k;
+
+	i = 0;
+	k = 0;
+	*rgb = allocate_memory(0, RGB, type);
+	while (str[i] != ',' && str[i] != '\0')
+		temp[k++] = str[i++];
+	temp[k] = '\0';
+	(*rgb)->r = ft_atoi(temp);
+	printf("str check %s\n", temp);
+	printf("rgb->r check %d\n", (*rgb)->r);
+	k = 0;
+	i++;
+	while (str[i] != ',' && str[i] != '\0')
+		temp[k++] = str[i++];
+	temp[k] = '\0';
+	(*rgb)->g = ft_atoi(temp);
+	printf("str check %s\n", temp);
+	printf("rgb->r check %d\n", (*rgb)->g);
+	k = 0;
+	i++;
+	while (str[i] != ' ' && (!(str[i] >= 9 && str[i] <= 13)) && str[i] != '\0')
+		temp[k++] = str[i++];
+	temp[k] = '\0';
+	(*rgb)->b = ft_atoi(temp);
+	printf("rgb->r check %d\n", (*rgb)->b);
+	if (rgb_check((*rgb)->r) || rgb_check((*rgb)->g) || rgb_check((*rgb)->b))
+	{
+		printf("Error: rgb values are not correct\n");
+		exit(1);
+	}
+}
+
+int	rgb_check(int num)
+{
+	if (!num || num < 0 || num > 255)
+	{
+		printf("incorrect\n: %d\n", num);
+		return (1);
+	}
+	return (0);
 }
 
 char	*get_path(char *line, char *new, t_type *type, int k)
@@ -107,4 +161,30 @@ char	*get_path(char *line, char *new, t_type *type, int k)
 	}
 	new[k] = '\0';
 	return (new);
+}
+
+void	check_specs(t_specs *specs)
+{
+	int fd;
+	fd = 0;
+	if (!specs->n_spec || !specs->s_spec || !specs->e_spec || !specs->w_spec
+		|| !specs->floor || !specs->ceil)
+	{
+		printf("Error: some of the specifications are missing2.\n");
+		exit(1);
+	}
+	//turn THIS back on once you have valid textures!!!!!!!!!
+	/*
+	fd = open(specs->n_spec, O_RDONLY);
+	if (fd < 0)
+		print_and_exit_specs("Error: cannot open the file1.", specs);
+	fd = open(specs->s_spec, O_RDONLY);
+	if (fd < 0)
+		print_and_exit_specs("Error: cannot open the file2.", specs);
+	fd = open(specs->e_spec, O_RDONLY);
+	if (fd < 0)
+		print_and_exit_specs("Error: cannot open the file3.", specs);
+	fd = open(specs->w_spec, O_RDONLY);
+	if (fd < 0)
+	print_and_exit_specs("Error: cannot open the file4.", specs);*/
 }

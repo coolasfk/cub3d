@@ -15,7 +15,8 @@ typedef enum
 	ARRAY,
 	ARRAY2D,
 	MAP,
-	CUB
+	CUB,
+	RGB
 
 }				AllocType;
 
@@ -36,6 +37,14 @@ typedef struct s_player
 	int			player_y;
 }				t_player;
 
+typedef struct s_rgb
+{
+	t_type		type;
+	int			r;
+	int			g;
+	int			b;
+}				t_rgb;
+
 typedef struct s_map
 {
 	t_type		type;
@@ -48,6 +57,8 @@ typedef struct s_specs
 	t_type		type;
 	char		*floor_spec;
 	char		*ceil_spec;
+	t_rgb		*floor;
+	t_rgb		*ceil;
 	char		*n_spec;
 	char		*s_spec;
 	char		*e_spec;
@@ -76,12 +87,16 @@ void			check_tracker(char *line, int *tracker);
 void			parse_cub_file_map(char *path, t_map *map, t_type *type);
 char			*trim_line(char *line, t_type *type);
 t_map			*set_map(char *path);
+void			get_rgb(char *str, t_rgb **rgb, t_type *type);
 // utils
 void			init(t_cub *cub);
 void			*allocate_memory(int size, int alloc_type, t_type *ret);
 void			print2d_array(char **array);
+void			print_and_exit_specs(char *str, t_specs *specs);
 // checks
 void			first_check(int argc, char *argv[]);
 void			check_map_path(char *path);
+int				rgb_check(int num);
+void			check_specs(t_specs *specs);
 
 #endif

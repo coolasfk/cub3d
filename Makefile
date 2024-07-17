@@ -25,7 +25,8 @@ SRC = main.c \
 	  src/utils/utils.c \
 	  src/parsing/set_specs.c \
 	  src/parsing/set_map.c \
-	  src/utils/printing_checks.c
+	  src/utils/printing_checks.c \
+	  src/utils/clean_exit.c
 
 DODIR = dofile
 

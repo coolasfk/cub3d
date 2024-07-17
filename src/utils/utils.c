@@ -12,6 +12,8 @@ void	*allocate_memory(int size, int alloc_type, t_type *ret)
 		ret = malloc(sizeof(char *) * size);
     else if (alloc_type == CUB)
 		ret = malloc(sizeof(t_cub));
+	else if (alloc_type == RGB)
+		ret = malloc(sizeof(t_rgb));
 	if (!ret)
 	{
 		perror("Cannot allocate memory");
