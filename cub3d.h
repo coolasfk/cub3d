@@ -77,8 +77,7 @@ typedef struct s_cub
 // main
 int				main(int argc, char *argv[]);
 // parsing
-t_specs			*set_specs(char *path);
-t_specs			*get_specs(void);
+
 void			parse_cub_file_specs(char *path, t_specs *specs, t_type *type);
 char			*get_path(char *line, char *new, t_type *type, int k);
 void			check_line(char *line, t_specs *specs, t_type *type);
@@ -88,15 +87,24 @@ void			parse_cub_file_map(char *path, t_map *map, t_type *type);
 char			*trim_line(char *line, t_type *type);
 t_map			*set_map(char *path);
 void			get_rgb(char *str, t_rgb **rgb, t_type *type);
+
+// init
+t_cub			*set_cub(void);
+t_cub			*get_cub(void);
+t_specs			*set_specs(char *path);
+t_specs			*get_specs(void);
+
 // utils
-void			init(t_cub *cub);
 void			*allocate_memory(int size, int alloc_type, t_type *ret);
 void			print2d_array(char **array);
 void			print_and_exit_specs(char *str, t_specs *specs);
+void			print_and_exit_map(char *str, t_map *map, char **line);
 // checks
 void			first_check(int argc, char *argv[]);
 void			check_map_path(char *path);
 int				rgb_check(int num);
 void			check_specs(t_specs *specs);
+int				check_border(char *line, t_map *map, int *tracker);
+void			final_map_check(char **array, t_map *map);
 
 #endif

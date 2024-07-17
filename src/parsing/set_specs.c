@@ -165,8 +165,9 @@ char	*get_path(char *line, char *new, t_type *type, int k)
 
 void	check_specs(t_specs *specs)
 {
-	int fd;
-	fd = 0;
+	/*
+	to be switched on later!!!!! int fd;
+	fd = 0;*/
 	if (!specs->n_spec || !specs->s_spec || !specs->e_spec || !specs->w_spec
 		|| !specs->floor || !specs->ceil)
 	{
