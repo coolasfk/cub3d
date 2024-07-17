@@ -101,23 +101,21 @@ void	get_rgb(char *str, t_rgb **rgb, t_type *type)
 		temp[k++] = str[i++];
 	temp[k] = '\0';
 	(*rgb)->r = ft_atoi(temp);
-	printf("str check %s\n", temp);
-	printf("rgb->r check %d\n", (*rgb)->r);
+	printf("Rrgb->r check %d\n", (*rgb)->r);
 	k = 0;
 	i++;
 	while (str[i] != ',' && str[i] != '\0')
 		temp[k++] = str[i++];
 	temp[k] = '\0';
 	(*rgb)->g = ft_atoi(temp);
-	printf("str check %s\n", temp);
-	printf("rgb->r check %d\n", (*rgb)->g);
+	printf("Grgb->g check %d\n", (*rgb)->g);
 	k = 0;
 	i++;
 	while (str[i] != ' ' && (!(str[i] >= 9 && str[i] <= 13)) && str[i] != '\0')
 		temp[k++] = str[i++];
 	temp[k] = '\0';
 	(*rgb)->b = ft_atoi(temp);
-	printf("rgb->r check %d\n", (*rgb)->b);
+	printf("Brgb->b check %d\n", (*rgb)->b);
 	if (rgb_check((*rgb)->r) || rgb_check((*rgb)->g) || rgb_check((*rgb)->b))
 	{
 		printf("Error: rgb values are not correct\n");
@@ -127,12 +125,10 @@ void	get_rgb(char *str, t_rgb **rgb, t_type *type)
 
 int	rgb_check(int num)
 {
-	if (!num || num < 0 || num > 255)
-	{
-		printf("incorrect\n: %d\n", num);
-		return (1);
-	}
-	return (0);
+	if (num >= 0 && num <= 255)
+		return (0);
+	printf("incorrect: %d\n", num);
+	return (1);
 }
 
 char	*get_path(char *line, char *new, t_type *type, int k)
@@ -174,7 +170,7 @@ void	check_specs(t_specs *specs)
 		printf("Error: some of the specifications are missing2.\n");
 		exit(1);
 	}
-	//turn THIS back on once you have valid textures!!!!!!!!!
+	// turn THIS back on once you have valid textures!!!!!!!!!
 	/*
 	fd = open(specs->n_spec, O_RDONLY);
 	if (fd < 0)

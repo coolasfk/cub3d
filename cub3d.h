@@ -33,6 +33,7 @@ typedef struct s_type
 typedef struct s_player
 {
 	t_type		type;
+	int			facing;
 	int			player_x;
 	int			player_y;
 }				t_player;

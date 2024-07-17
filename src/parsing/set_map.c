@@ -11,8 +11,9 @@ t_map	*set_map(char *path)
 	map = allocate_memory(0, MAP, type);
 	map->map2d = allocate_memory(specs->rows, ARRAY2D, type);
 	parse_cub_file_map(path, map, type);
-    final_map_check(map->map2d, map);
-	print2d_array(map->map2d);
+    print2d_array(map->map2d);
+	final_map_check(map->map2d, map);
+	
 	return (map);
 }
 
@@ -49,8 +50,8 @@ void	parse_cub_file_map(char *path, t_map *map, t_type *type)
 			check_tracker(line, &tracker);
 		free(line);
 		line = get_next_line(fd);
-        if (tracker == 6)
-		check_border(line, map, &tracker);
+		if (tracker == 6)
+			check_border(line, map, &tracker);
 	}
 }
 
@@ -107,13 +108,14 @@ void	build_map2d(char *line, t_map *map, t_type *type, int *index)
 			return ;
 		i++;
 	}
+    /*
 	if (line[i] != '1')
-		print_and_exit_map("Error: map not surrounded by 1", map, &line);
-	i = -1;
+		print_and_exit_map("1Error: map not surrounded by 1", map, &line);*/
 	line = trim_line(line, type);
-	printf("character check %c\n", line[ft_strlen(line) - 2]);
-	if (line[ft_strlen(line) - 2] != '1')
-		print_and_exit_map("Error: map not surrounded by 1", map, &line);
+	i = -1;
+    /*
+	if (line[ft_strlen(line) - 1] != '1')
+		print_and_exit_map("2Error: map not surrounded by 1", map, &line);
 	while (line[++i] != '\0')
 	{
 		if ((line[i] != 32) && !(line[i] >= 9 && line[i] <= 13)
@@ -122,12 +124,11 @@ void	build_map2d(char *line, t_map *map, t_type *type, int *index)
 			&& (line[i] != '2'))
 			print_and_exit_map("Error: map contains wrong characters.", map,
 				&line);
-	}
-	map->map2d[*index] = allocate_memory(ft_strlen(line), ARRAY, type);
-	ft_strlcpy(map->map2d[*index], line, ft_strlen(line));
+	}*/
+	map->map2d[*index] = allocate_memory(ft_strlen(line) + 1, ARRAY, type);
+	ft_strlcpy(map->map2d[*index], line, ft_strlen(line)+1);
 	free(line);
 	line = NULL;
-	printf("127 set map\n");
 	(*index)++;
 }
 
@@ -138,20 +139,18 @@ char	*trim_line(char *line, t_type *type)
 	size_t i = 0;
 	count_trim = 0;
 	int len = ft_strlen(line);
-
 	new = allocate_memory(ft_strlen(line), ARRAY, type);
 
-	while ((line[len - 1] == 32 || (line[len - 1] >= 9 && line[len - 1] <= 13)))
+	while ((line[len - 1] == 32 || (line[len - 1] >= 9 && line[len - 1] <= 13))
+		|| (line[len - 1] == '\n'))
 	{
 		count_trim++;
 		len--;
 	}
-
-	while (i <= ft_strlen(line) - count_trim)
+	while (i < ft_strlen(line) - count_trim && line[i] != '\n')
 	{
 		new[i] = line[i];
 		i++;
 	}
-	new[i] = '\0';
 	return (new);
 }

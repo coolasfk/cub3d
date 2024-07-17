@@ -18,7 +18,7 @@ void	check_map_path(char *path)
 		exit(1);
 	}
 }
-
+/*
 void	final_map_check(char **array, t_map *map)
 {
 	int i = 0;
@@ -33,17 +33,22 @@ void	final_map_check(char **array, t_map *map)
 			k++;
 		while (array[i][k] != '\0')
 		{
-			count++;
+			if ((array[i][k] == '0' || array[i][k] == 'W' || array[i][k] == 'E'
+					|| array[i][k] == 'N' || array[i][k] == 'S'))
+				count++;
 			k++;
 		}
+		if (array[i + 1] == NULL || i == 0)
+			count = 2147483647;
 		if (smallest > count)
 			smallest = count;
+
 		k = 0;
-		count =0;
+		count = 0;
 		i++;
 	}
-	printf("smallers %d\n", smallest);
-	if (smallest < 3 || i < 3)
+
+	if (smallest < 1 || i < 3)
 		print_and_exit_map("Error: map error1.", map, NULL);
 	k = 0;
 	while (array[i - 1][k] != '\0' && (array[i - 1][k] == 32 || (array[i
@@ -55,4 +60,4 @@ void	final_map_check(char **array, t_map *map)
 			print_and_exit_map("Error: map error2.", map, NULL);
 		k++;
 	}
-}
+}*/
