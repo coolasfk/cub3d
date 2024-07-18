@@ -35,7 +35,7 @@ t_player	*set_player(void)
 	if (player)
 		return (player);
 	player = allocate_memory(0, PLAYER, type);
-    player->facing = NULL;
+    player->facing = 666;
 	return (player);
 }
 

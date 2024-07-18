@@ -16,7 +16,8 @@ typedef enum
 	ARRAY2D,
 	MAP,
 	CUB,
-	RGB
+	RGB,
+    PLAYER
 
 }				AllocType;
 
@@ -50,6 +51,7 @@ typedef struct s_map
 {
 	t_type		type;
 	char		**map2d;
+    char		**check;
 	char		*line;
 }				t_map;
 
@@ -94,6 +96,8 @@ t_cub			*set_cub(void);
 t_cub			*get_cub(void);
 t_specs			*set_specs(char *path);
 t_specs			*get_specs(void);
+t_player	*set_player(void);
+t_player	*get_player(void);
 
 // utils
 void			*allocate_memory(int size, int alloc_type, t_type *ret);
@@ -106,6 +110,13 @@ void			check_map_path(char *path);
 int				rgb_check(int num);
 void			check_specs(t_specs *specs);
 int				check_border(char *line, t_map *map, int *tracker);
-void			final_map_check(char **array, t_map *map);
+//dfs
+void	final_map_check_dfs(char **array, t_map *map);
+int	check_borders(char **arr, int i, int j, char **check);
+bool	space_check(char c);
+void	find_player(char **array, int *i, int *j, t_map *map);
+bool is_all_good(char **arr, int i, int j);
+bool check_field( char c);
+void check_players(char **array, t_map *map);
 
 #endif

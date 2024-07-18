@@ -38,12 +38,16 @@ void	print_and_exit_map(char *str, t_map *map, char **line)
 	{
 		while (map->map2d[i] != NULL)
 		{
+			free(map->check[i]);
 			free(map->map2d[i]);
 			map->map2d[i] = NULL; 
+			map->check[i] = NULL;
 			i++;
 		}
+		free(map->check);
 		free(map->map2d);
 		map->map2d = NULL; 
+		map->check = NULL;
 	}
 	if (line != NULL)
 		free(*line); 

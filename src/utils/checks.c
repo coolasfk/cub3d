@@ -18,46 +18,26 @@ void	check_map_path(char *path)
 		exit(1);
 	}
 }
-/*
-void	final_map_check(char **array, t_map *map)
+
+
+void	check_players(char **array, t_map *map)
 {
 	int i = 0;
-	int k = 0;
+	int j = 0;
 	int count = 0;
-	int smallest = 2147483647;
-
 	while (array[i] != NULL)
 	{
-		while (array[i][k] != '\0' && (array[i][k] == 32 || (array[i][k] >= 9
-					&& array[i][k] <= 13)))
-			k++;
-		while (array[i][k] != '\0')
+		while (array[i][j] != '\0')
 		{
-			if ((array[i][k] == '0' || array[i][k] == 'W' || array[i][k] == 'E'
-					|| array[i][k] == 'N' || array[i][k] == 'S'))
+			if (array[i][j] == 'N' || array[i][j] == 'W' || array[i][j] == 'E'
+				|| array[i][j] == 'S')
 				count++;
-			k++;
+			j++;
 		}
-		if (array[i + 1] == NULL || i == 0)
-			count = 2147483647;
-		if (smallest > count)
-			smallest = count;
-
-		k = 0;
-		count = 0;
+		j = 0;
 		i++;
 	}
-
-	if (smallest < 1 || i < 3)
-		print_and_exit_map("Error: map error1.", map, NULL);
-	k = 0;
-	while (array[i - 1][k] != '\0' && (array[i - 1][k] == 32 || (array[i
-				- 1][k] >= 9 && array[i - 1][k] <= 13)))
-		k++;
-	while (array[i - 1][k] != '\0')
-	{
-		if (array[i - 1][k] != '1')
-			print_and_exit_map("Error: map error2.", map, NULL);
-		k++;
-	}
-}*/
+	printf("number of players %d\n", count);
+	if (count != 1)
+		print_and_exit_map("Error: wrong number of players.", map, NULL);
+}

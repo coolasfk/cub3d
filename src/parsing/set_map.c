@@ -10,9 +10,11 @@ t_map	*set_map(char *path)
 	type = NULL;
 	map = allocate_memory(0, MAP, type);
 	map->map2d = allocate_memory(specs->rows, ARRAY2D, type);
+    map->check = allocate_memory(specs->rows, ARRAY2D, type);
 	parse_cub_file_map(path, map, type);
     print2d_array(map->map2d);
-	final_map_check(map->map2d, map);
+    final_map_check_dfs(map->map2d, map);
+    check_players(map->map2d, map);
 	
 	return (map);
 }
@@ -60,7 +62,6 @@ int	check_border(char *line, t_map *map, int *tracker)
 	int	i;
 
 	i = 0;
-	printf("line %s\n", line);
 	while (line[i] != '\0' && (line[i] == 32 || (line[i] >= 9
 				&& line[i] <= 13)))
 	{
@@ -68,7 +69,6 @@ int	check_border(char *line, t_map *map, int *tracker)
 	}
 	while (line[i] != '\0')
 	{
-		printf("line[i] check %c\n", line[i]);
 		if (line[i] != '1')
 			print_and_exit_map("Error: map not surrounded by 1.", map, &line);
 		i++;
@@ -108,14 +108,8 @@ void	build_map2d(char *line, t_map *map, t_type *type, int *index)
 			return ;
 		i++;
 	}
-    /*
-	if (line[i] != '1')
-		print_and_exit_map("1Error: map not surrounded by 1", map, &line);*/
 	line = trim_line(line, type);
 	i = -1;
-    /*
-	if (line[ft_strlen(line) - 1] != '1')
-		print_and_exit_map("2Error: map not surrounded by 1", map, &line);
 	while (line[++i] != '\0')
 	{
 		if ((line[i] != 32) && !(line[i] >= 9 && line[i] <= 13)
@@ -124,9 +118,11 @@ void	build_map2d(char *line, t_map *map, t_type *type, int *index)
 			&& (line[i] != '2'))
 			print_and_exit_map("Error: map contains wrong characters.", map,
 				&line);
-	}*/
+	}
 	map->map2d[*index] = allocate_memory(ft_strlen(line) + 1, ARRAY, type);
-	ft_strlcpy(map->map2d[*index], line, ft_strlen(line)+1);
+    map->check[*index] = allocate_memory(ft_strlen(line) + 1, ARRAY, type);
+  	ft_strlcpy(map->map2d[*index], line, ft_strlen(line)+1);
+	ft_strlcpy(map->check[*index], line, ft_strlen(line)+1);
 	free(line);
 	line = NULL;
 	(*index)++;

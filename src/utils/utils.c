@@ -14,6 +14,8 @@ void	*allocate_memory(int size, int alloc_type, t_type *ret)
 		ret = malloc(sizeof(t_cub));
 	else if (alloc_type == RGB)
 		ret = malloc(sizeof(t_rgb));
+	else if (alloc_type == PLAYER)
+		ret = malloc(sizeof(t_player));
 	if (!ret)
 	{
 		perror("Cannot allocate memory");
