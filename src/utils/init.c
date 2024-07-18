@@ -1,6 +1,6 @@
 #include "cub3d.h"
 
-t_cub	*set_cub(void)
+t_cub	*set_cub(char *argv[])
 {
 	static t_cub	*cub;
 	t_type			*type;
@@ -9,9 +9,9 @@ t_cub	*set_cub(void)
 		return (cub);
 	type = NULL;
 	cub = allocate_memory(0, CUB, type);
-	cub->specs = NULL;
-	cub->map = NULL;
-	cub->player = NULL;
+	cub->specs = set_specs(argv[1]);
+	cub->map = set_map(argv[1]);
+	cub->player = get_player();
 	return (cub);
 }
 
@@ -21,7 +21,7 @@ t_cub	*get_cub(void)
 
 	if (!cub)
 	{
-		cub = set_cub();
+		cub = set_cub(NULL);
 	}
 	return (cub);
 }
@@ -35,7 +35,7 @@ t_player	*set_player(void)
 	if (player)
 		return (player);
 	player = allocate_memory(0, PLAYER, type);
-    player->facing = 666;
+	player->facing = 666;
 	return (player);
 }
 
@@ -44,6 +44,6 @@ t_player	*get_player(void)
 	static t_player	*player;
 
 	if (!player)
-		player = get_player();
+		player = set_player();
 	return (player);
 }

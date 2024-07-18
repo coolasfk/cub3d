@@ -92,7 +92,7 @@ t_map			*set_map(char *path);
 void			get_rgb(char *str, t_rgb **rgb, t_type *type);
 
 // init
-t_cub			*set_cub(void);
+t_cub			*set_cub(char *argv[]);
 t_cub			*get_cub(void);
 t_specs			*set_specs(char *path);
 t_specs			*get_specs(void);
@@ -113,7 +113,7 @@ int				check_border(char *line, t_map *map, int *tracker);
 //dfs
 void	final_map_check_dfs(char **array, t_map *map);
 int	check_borders(char **arr, int i, int j, char **check);
-bool	space_check(char c);
+bool	space_check(char c, int left);
 void	find_player(char **array, int *i, int *j, t_map *map);
 bool is_all_good(char **arr, int i, int j);
 bool check_field( char c);

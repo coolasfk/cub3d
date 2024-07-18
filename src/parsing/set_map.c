@@ -46,38 +46,15 @@ void	parse_cub_file_map(char *path, t_map *map, t_type *type)
 	line = get_next_line(fd);
 	while (line)
 	{
-		if (tracker == 7)
+		if (tracker == 6)
 			build_map2d(line, map, type, &index);
 		else
 			check_tracker(line, &tracker);
 		free(line);
 		line = get_next_line(fd);
-		if (tracker == 6)
-			check_border(line, map, &tracker);
 	}
 }
 
-int	check_border(char *line, t_map *map, int *tracker)
-{
-	int	i;
-
-	i = 0;
-	while (line[i] != '\0' && (line[i] == 32 || (line[i] >= 9
-				&& line[i] <= 13)))
-	{
-		i++;
-	}
-	while (line[i] != '\0')
-	{
-		if (line[i] != '1')
-			print_and_exit_map("Error: map not surrounded by 1.", map, &line);
-		i++;
-	}
-	printf("75 check \n");
-	if (*tracker == 6)
-		(*tracker)++;
-	return (0);
-}
 void	check_tracker(char *line, int *tracker)
 {
 	int	i;
@@ -108,7 +85,9 @@ void	build_map2d(char *line, t_map *map, t_type *type, int *index)
 			return ;
 		i++;
 	}
+    printf("line befor trimming: %s\n", line);
 	line = trim_line(line, type);
+    printf("line after trimming: %s\n\n\n", line);
 	i = -1;
 	while (line[++i] != '\0')
 	{
@@ -119,10 +98,8 @@ void	build_map2d(char *line, t_map *map, t_type *type, int *index)
 			print_and_exit_map("Error: map contains wrong characters.", map,
 				&line);
 	}
-	map->map2d[*index] = allocate_memory(ft_strlen(line) + 1, ARRAY, type);
-    map->check[*index] = allocate_memory(ft_strlen(line) + 1, ARRAY, type);
-  	ft_strlcpy(map->map2d[*index], line, ft_strlen(line)+1);
-	ft_strlcpy(map->check[*index], line, ft_strlen(line)+1);
+    map->map2d[*index] = ft_strdup(line);
+     map->check[*index] = ft_strdup(line);
 	free(line);
 	line = NULL;
 	(*index)++;
