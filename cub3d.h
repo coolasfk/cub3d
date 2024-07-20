@@ -1,6 +1,22 @@
 #ifndef CUB3D_H
 # define CUB3D_H
 
+# define ESC 53
+# define KEY_W 13
+# define KEY_A 0
+# define KEY_S 1
+# define KEY_D 2
+# define KEY_LEFT 123
+# define KEY_RIGHT 124
+
+# define SCREEN_H 768
+# define SCREEN_W 1064
+# define FOV 90.0f
+# define WALL 3.0f
+
+# define TEXTURE_H 64
+# define TEXTURE_W 64
+
 # include "libft/libft.h"
 # include "minilibx/mlx.h"
 # include <fcntl.h>
@@ -17,7 +33,8 @@ typedef enum
 	MAP,
 	CUB,
 	RGB,
-	PLAYER
+	PLAYER,
+    MLX
 
 }				AllocType;
 
@@ -69,12 +86,22 @@ typedef struct s_specs
 	int			rows;
 }				t_specs;
 
+typedef struct s_mlx_
+{
+	int			win_h;
+	int			win_w;
+	void		*mlx_ptr;
+	void		*win_ptr;
+
+} t_mlx;
+
 typedef struct s_cub
 {
 	t_type		type;
 	t_specs		*specs;
 	t_map		*map;
 	t_player	*player;
+	t_mlx		*mlx;
 }				t_cub;
 
 // main
@@ -98,12 +125,14 @@ t_specs			*set_specs(char *path);
 t_specs			*get_specs(void);
 t_player		*set_player(void);
 t_player		*get_player(void);
+t_mlx	*init_mlx(t_mlx *mlx_struct, t_cub *cub);
 
 // utils
 void			*allocate_memory(int size, int alloc_type, t_type *ret);
 void			print2d_array(char **array);
 void			print_and_exit_specs(char *str, t_specs *specs);
 void			print_and_exit_map(char *str, t_map *map, char **line);
+int	key_hook(int keycode, t_cub *cub);
 // checks
 void			first_check(int argc, char *argv[]);
 void			check_map_path(char *path);
@@ -119,5 +148,6 @@ void			find_player(char **array, int *i, int *j, t_map *map);
 bool			is_all_good(char **arr, int i, int j);
 bool			check_field(char c);
 void			check_players(char **array, t_map *map);
-
+//exit
+int	end_game(t_cub *cub);
 #endif

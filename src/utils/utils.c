@@ -16,6 +16,8 @@ void	*allocate_memory(int size, int alloc_type, t_type *ret)
 		ret = malloc(sizeof(t_rgb));
 	else if (alloc_type == PLAYER)
 		ret = malloc(sizeof(t_player));
+	else if (alloc_type == MLX)
+		ret = malloc(sizeof(t_mlx));
 	if (!ret)
 	{
 		perror("Cannot allocate memory");
