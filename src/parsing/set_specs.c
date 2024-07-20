@@ -26,25 +26,44 @@ t_specs	*get_specs(void)
 
 void	parse_cub_file_specs(char *path, t_specs *specs, t_type *type)
 {
-	char	*line;
-	int		fd;
+	char		*line;
+	int			fd;
+	static int	flag;
 
+	flag = 0;
 	fd = open(path, O_RDONLY);
 	if (fd < 0)
-	{
-		printf("Error: cannot open the file.");
-		exit(0);
-	}
+		print_and_exit_specs("Error: cannot open the file.", specs);
 	line = get_next_line(fd);
 	while (line)
 	{
 		check_line(line, specs, type);
+		check_line2(line, specs, &flag);
 		free(line);
 		line = get_next_line(fd);
 		specs->rows++;
 	}
 	free(line);
 	printf("check specs rows %d\n", specs->rows);
+}
+
+void	check_line2(char *line, t_specs *specs, int *flag)
+{
+	int	i;
+
+	i = 0;
+	printf("-------flag is : %d\n", *flag);
+	while ((line[i] == 32 || (line[i] >= 9 && line[i] <= 13) || line[i] == '\n')
+		&& line[i] != '\0')
+		i++;
+	if (*flag == 0 && line[i] == '1')
+		*flag = 1;
+	if(*flag == 1 && (line[i] != '1') && (line[i] != '\n') && (line[i] != '\0'))
+	{
+		printf("line[i] check%c\n", line[i]);
+print_and_exit_specs("Error: map error 3.", specs);
+	}
+	
 }
 
 void	check_line(char *line, t_specs *specs, t_type *type)
@@ -162,8 +181,8 @@ char	*get_path(char *line, char *new, t_type *type, int k)
 void	check_specs(t_specs *specs)
 {
 	/*
-	to be switched on later!!!!! int fd;
-	fd = 0;*/
+	to be switched on later!!!!! */int fd;
+	fd = 0;
 	if (!specs->n_spec || !specs->s_spec || !specs->e_spec || !specs->w_spec
 		|| !specs->floor || !specs->ceil)
 	{
@@ -171,7 +190,7 @@ void	check_specs(t_specs *specs)
 		exit(1);
 	}
 	// turn THIS back on once you have valid textures!!!!!!!!!
-	/*
+	/**/
 	fd = open(specs->n_spec, O_RDONLY);
 	if (fd < 0)
 		print_and_exit_specs("Error: cannot open the file1.", specs);
@@ -183,5 +202,5 @@ void	check_specs(t_specs *specs)
 		print_and_exit_specs("Error: cannot open the file3.", specs);
 	fd = open(specs->w_spec, O_RDONLY);
 	if (fd < 0)
-	print_and_exit_specs("Error: cannot open the file4.", specs);*/
+	print_and_exit_specs("Error: cannot open the file4.", specs);
 }

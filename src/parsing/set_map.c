@@ -81,13 +81,12 @@ void	build_map2d(char *line, t_map *map, t_type *type, int *index)
 	i = 0;
 	while ((line[i] == 32 || (line[i] >= 9 && line[i] <= 13)))
 	{
+        /* /// should i switch it on or not ??
 		if (line[i] == '\n' || line[i] == '\0')
-			return ;
+			return ;*/
 		i++;
 	}
-    printf("line befor trimming: %s\n", line);
 	line = trim_line(line, type);
-    printf("line after trimming: %s\n\n\n", line);
 	i = -1;
 	while (line[++i] != '\0')
 	{

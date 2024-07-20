@@ -17,14 +17,14 @@ void	final_map_check_dfs(char **array, t_map *map)
 
 int	check_borders(char **arr, int i, int j, char **check)
 {
-	if (i < 0 || j < 0 || (arr[i] == NULL) || j > (int)ft_strlen(arr[i])  || (arr[i][j] == '\0')
-		|| check[i][j] == 9)
+	if (i < 0 || j < 0 || (arr[i] == NULL) || j > (int)ft_strlen(arr[i])
+		|| (arr[i][j] == '\0') || check[i][j] == 9)
 	{
 		return (1);
 	}
 	if (!is_all_good(arr, i, j))
 	{
-		printf("Error: map has gaps or is not surrounded by 1 i: %d, j:%d, line: %s\n", i, j, arr[i]);
+		printf("Error: map has gaps or is not surrounded by 1 i: %d, j:%d, line:%s\n", i, j, arr[i]);
 		exit(1);
 	}
 	check[i][j] = 9;
@@ -37,6 +37,11 @@ int	check_borders(char **arr, int i, int j, char **check)
 
 bool	is_all_good(char **arr, int i, int j)
 {
+    if (i == 0 && ((arr[i][j] != '1' && !space_check(arr[i][j], 0))))
+	{
+        printf("problem detected, %c\n", arr[i][j]);
+		return (false);
+	}
 	if (check_field(arr[i][j]) && i == 0 && (j == 0 || space_check(arr[i][j
 				- 1], 0)))
 	{
@@ -51,8 +56,7 @@ bool	is_all_good(char **arr, int i, int j)
 	{
 		return (false);
 	}
-	if (check_field(arr[i][j]) && (arr[i - 1] != NULL && space_check(arr[i
-				- 1][j], 0)))
+	if (check_field(arr[i][j]) && (i - 1 >= 0 && space_check(arr[i - 1][j], 0)))
 	{
 		return (false);
 	}
