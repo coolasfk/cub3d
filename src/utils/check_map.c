@@ -11,8 +11,8 @@ void	final_map_check_dfs(char **array, t_map *map)
 	j = 0;
 	find_player(array, &i, &j, map);
 	check_borders(array, i, j, map->check);
-	player->player_x = i;
-	player->player_y = j;
+    give_player_values(i, j, player);
+    map->map2d[i][j] = '0';
 }
 
 int	check_borders(char **arr, int i, int j, char **check)
@@ -94,15 +94,15 @@ void	find_player(char **array, int *i, int *j, t_map *map)
 	{
 		while (array[*i][*j] != '\0')
 		{
-			if (array[*i][*j] == 'N')
+			if (array[*i][*j] == 'E')
 				player->facing = 0;
-			else if (array[*i][*j] == 'W')
-				player->facing = 270;
-			else if (array[*i][*j] == 'E')
-				player->facing = 90;
+			else if (array[*i][*j] == 'N')
+				player->facing = PI + (PI/2);
 			else if (array[*i][*j] == 'S')
-				player->facing = 180;
-			if (player->facing != 666)
+				player->facing = PI/2;
+			else if (array[*i][*j] == 'W')
+				player->facing = PI;
+			if (player->facing != -1)
 				return ;
 			(*j)++;
 		}

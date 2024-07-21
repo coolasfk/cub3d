@@ -1,6 +1,7 @@
 #ifndef CUB3D_H
 # define CUB3D_H
 
+# define PI 3.14
 # define ESC 53
 # define KEY_W 13
 # define KEY_A 0
@@ -10,8 +11,8 @@
 # define KEY_RIGHT 124
 
 # define SCREEN_H 768
-# define SCREEN_W 1064
-# define FOV 90.0f
+# define SCREEN_W 1024
+# define FOV_RAD (PI/2)
 # define WALL 3.0f
 
 # define TEXTURE_H 64
@@ -34,7 +35,7 @@ typedef enum
 	CUB,
 	RGB,
 	PLAYER,
-    MLX
+	MLX
 
 }				AllocType;
 
@@ -51,9 +52,12 @@ typedef struct s_type
 typedef struct s_player
 {
 	t_type		type;
-	int			facing;
-	int			player_x;
-	int			player_y;
+	float		facing;
+	float		first_ray;
+    float		middle_ray;
+	float		last_ray;
+	float		player_x;
+	float		player_y;
 }				t_player;
 
 typedef struct s_rgb
@@ -93,7 +97,7 @@ typedef struct s_mlx_
 	void		*mlx_ptr;
 	void		*win_ptr;
 
-} t_mlx;
+}				t_mlx;
 
 typedef struct s_cub
 {
@@ -125,14 +129,15 @@ t_specs			*set_specs(char *path);
 t_specs			*get_specs(void);
 t_player		*set_player(void);
 t_player		*get_player(void);
-t_mlx	*init_mlx(t_mlx *mlx_struct, t_cub *cub);
+void			give_player_values(int i, int j, t_player *player);
+t_mlx			*init_mlx(t_mlx *mlx_struct, t_cub *cub);
 
 // utils
 void			*allocate_memory(int size, int alloc_type, t_type *ret);
 void			print2d_array(char **array);
 void			print_and_exit_specs(char *str, t_specs *specs);
 void			print_and_exit_map(char *str, t_map *map, char **line);
-int	key_hook(int keycode, t_cub *cub);
+int				key_hook(int keycode, t_cub *cub);
 // checks
 void			first_check(int argc, char *argv[]);
 void			check_map_path(char *path);
@@ -148,6 +153,9 @@ void			find_player(char **array, int *i, int *j, t_map *map);
 bool			is_all_good(char **arr, int i, int j);
 bool			check_field(char c);
 void			check_players(char **array, t_map *map);
-//exit
-int	end_game(t_cub *cub);
+// exit
+int				end_game(t_cub *cub);
+// render
+int			render(t_cub *cub);
+void	launch_rays(t_player *player, t_map *map);
 #endif

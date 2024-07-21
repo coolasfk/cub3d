@@ -48,9 +48,10 @@ void	print_and_exit_map(char *str, t_map *map, char **line)
 		free(map->map2d);
 		map->map2d = NULL; 
 		map->check = NULL;
+		free(map); 
 	}
 	if (line != NULL)
 		free(*line); 
-	free(map); 
+	
 	print_and_exit_specs(str, specs);
 }

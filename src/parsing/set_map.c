@@ -13,8 +13,9 @@ t_map	*set_map(char *path)
     map->check = allocate_memory(specs->rows, ARRAY2D, type);
 	parse_cub_file_map(path, map, type);
     print2d_array(map->map2d);
-    final_map_check_dfs(map->map2d, map);
     check_players(map->map2d, map);
+    final_map_check_dfs(map->map2d, map);
+   
 	
 	return (map);
 }

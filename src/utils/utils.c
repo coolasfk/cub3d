@@ -19,9 +19,6 @@ void	*allocate_memory(int size, int alloc_type, t_type *ret)
 	else if (alloc_type == MLX)
 		ret = malloc(sizeof(t_mlx));
 	if (!ret)
-	{
-		perror("Cannot allocate memory");
-		exit(1);
-	}
+	print_and_exit_map("Error: cannot allocate memory.", NULL, NULL);
 	return (ret);
 }

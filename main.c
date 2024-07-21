@@ -7,13 +7,11 @@ int	main(int argc, char *argv[])
 	first_check(argc, argv);
 	cub = set_cub(argv);
 	cub->mlx = init_mlx(cub->mlx, cub);
-	// render(cub);
-	if (cub)
-		printf("im here all good");
+    printf("check\n");
 }
 
 t_mlx	*init_mlx(t_mlx *mlx, t_cub *cub)
-{
+{   
 	mlx->mlx_ptr = mlx_init();
 	if (mlx->mlx_ptr == NULL)
 	{
@@ -25,10 +23,13 @@ t_mlx	*init_mlx(t_mlx *mlx, t_cub *cub)
 	{
 		printf("Error: mlx_init error.\n");
         return  NULL;
-	}
-	mlx_hook(cub->mlx->win_ptr, 17, 0, end_game, &cub);
+	} 
+	
 	mlx_key_hook(cub->mlx->win_ptr, key_hook, &cub);
+    mlx_hook(cub->mlx->win_ptr, 17, 0, end_game, &cub);
+    render(cub);
 	mlx_loop(mlx->mlx_ptr);
+
 	return (mlx);
 }
 
