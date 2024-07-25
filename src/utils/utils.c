@@ -18,6 +18,8 @@ void	*allocate_memory(int size, int alloc_type, t_type *ret)
 		ret = malloc(sizeof(t_player));
 	else if (alloc_type == MLX)
 		ret = malloc(sizeof(t_mlx));
+	else if (alloc_type == RAYS)
+		ret = malloc(sizeof(t_rays));
 	if (!ret)
 	print_and_exit_map("Error: cannot allocate memory.", NULL, NULL);
 	return (ret);

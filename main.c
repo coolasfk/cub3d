@@ -7,29 +7,30 @@ int	main(int argc, char *argv[])
 	first_check(argc, argv);
 	cub = set_cub(argv);
 	cub->mlx = init_mlx(cub->mlx, cub);
-    printf("check\n");
+	printf("check\n");
 }
 
 t_mlx	*init_mlx(t_mlx *mlx, t_cub *cub)
-{   
+{
 	mlx->mlx_ptr = mlx_init();
 	if (mlx->mlx_ptr == NULL)
 	{
 		printf("Error: mlx_init error.\n");
-        return NULL;
+		return (NULL);
 	}
 	mlx->win_ptr = mlx_new_window(mlx->mlx_ptr, SCREEN_W, SCREEN_H, "Cub3D");
 	if (mlx->win_ptr == NULL)
 	{
 		printf("Error: mlx_init error.\n");
-        return  NULL;
-	} 
-	
+		return (NULL);
+	}
+	mlx->img = mlx_new_image(mlx->mlx_ptr, SCREEN_W, SCREEN_H);
+	mlx->addr = mlx_get_data_addr(mlx->img, &mlx->bpp, &mlx->line_length,
+			&mlx->endian);
 	mlx_key_hook(cub->mlx->win_ptr, key_hook, &cub);
-    mlx_hook(cub->mlx->win_ptr, 17, 0, end_game, &cub);
-    render(cub);
+	mlx_hook(cub->mlx->win_ptr, 17, 0, end_game, &cub);
+	render(cub);
 	mlx_loop(mlx->mlx_ptr);
-
 	return (mlx);
 }
 

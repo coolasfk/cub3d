@@ -10,13 +10,12 @@ t_map	*set_map(char *path)
 	type = NULL;
 	map = allocate_memory(0, MAP, type);
 	map->map2d = allocate_memory(specs->rows, ARRAY2D, type);
-    map->check = allocate_memory(specs->rows, ARRAY2D, type);
+	map->check = allocate_memory(specs->rows, ARRAY2D, type);
 	parse_cub_file_map(path, map, type);
-    print2d_array(map->map2d);
-    check_players(map->map2d, map);
-    final_map_check_dfs(map->map2d, map);
-   
-	
+	print2d_array(map->map2d);
+	check_players(map->map2d, map);
+	final_map_check_dfs(map->map2d, map);
+	get_map_parameters(map, map->map2d);
 	return (map);
 }
 
@@ -82,9 +81,8 @@ void	build_map2d(char *line, t_map *map, t_type *type, int *index)
 	i = 0;
 	while ((line[i] == 32 || (line[i] >= 9 && line[i] <= 13)))
 	{
-        /* /// should i switch it on or not ??
-		if (line[i] == '\n' || line[i] == '\0')
-			return ;*/
+		if (*index == 0 && (line[i] == '\n' || line[i] == '\0'))
+			return ;
 		i++;
 	}
 	line = trim_line(line, type);
@@ -98,8 +96,8 @@ void	build_map2d(char *line, t_map *map, t_type *type, int *index)
 			print_and_exit_map("Error: map contains wrong characters.", map,
 				&line);
 	}
-    map->map2d[*index] = ft_strdup(line);
-     map->check[*index] = ft_strdup(line);
+	map->map2d[*index] = ft_strdup(line);
+	map->check[*index] = ft_strdup(line);
 	free(line);
 	line = NULL;
 	(*index)++;
@@ -107,13 +105,15 @@ void	build_map2d(char *line, t_map *map, t_type *type, int *index)
 
 char	*trim_line(char *line, t_type *type)
 {
-	char *new;
-	int count_trim;
-	size_t i = 0;
-	count_trim = 0;
-	int len = ft_strlen(line);
-	new = allocate_memory(ft_strlen(line), ARRAY, type);
+	char	*new;
+	int		count_trim;
+	size_t	i;
+	int		len;
 
+	i = 0;
+	count_trim = 0;
+	len = ft_strlen(line);
+	new = allocate_memory(ft_strlen(line), ARRAY, type);
 	while ((line[len - 1] == 32 || (line[len - 1] >= 9 && line[len - 1] <= 13))
 		|| (line[len - 1] == '\n'))
 	{
@@ -126,4 +126,20 @@ char	*trim_line(char *line, t_type *type)
 		i++;
 	}
 	return (new);
+}
+
+void	get_map_parameters(t_map *map, char **array)
+{
+	int y = 0;
+	map->map_height = 0;
+	map->map_width = 0;
+	while (array[map->map_height] != NULL)
+	{
+		while (array[map->map_height][y] != '\0')
+			y++;
+		if (y > map->map_width)
+			map->map_width = y;
+		y = 0;
+		map->map_height++;
+	}
 }

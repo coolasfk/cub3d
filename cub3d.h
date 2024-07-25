@@ -1,7 +1,7 @@
 #ifndef CUB3D_H
 # define CUB3D_H
 
-# define PI 3.14
+# define PI 3.14f
 # define ESC 53
 # define KEY_W 13
 # define KEY_A 0
@@ -10,10 +10,14 @@
 # define KEY_LEFT 123
 # define KEY_RIGHT 124
 
+//# define SCREEN_H 768
+//# define SCREEN_W 1024
 # define SCREEN_H 768
 # define SCREEN_W 1024
-# define FOV_RAD (PI/2)
+# define FOV (PI / 2)
 # define WALL 3.0f
+# define GRID_SIZE 64
+# define PROJ_PLANE_DIST (SCREEN_W / (2.0 * tan(FOV / 2.0)))
 
 # define TEXTURE_H 64
 # define TEXTURE_W 64
@@ -35,7 +39,8 @@ typedef enum
 	CUB,
 	RGB,
 	PLAYER,
-	MLX
+	MLX,
+	RAYS
 
 }				AllocType;
 
@@ -54,7 +59,7 @@ typedef struct s_player
 	t_type		type;
 	float		facing;
 	float		first_ray;
-    float		middle_ray;
+	float		middle_ray;
 	float		last_ray;
 	float		player_x;
 	float		player_y;
@@ -74,6 +79,8 @@ typedef struct s_map
 	char		**map2d;
 	char		**check;
 	char		*line;
+	int			map_width;
+	int			map_height;
 }				t_map;
 
 typedef struct s_specs
@@ -90,14 +97,35 @@ typedef struct s_specs
 	int			rows;
 }				t_specs;
 
-typedef struct s_mlx_
+typedef struct s_mlx
 {
 	int			win_h;
+	void		*img;
+	char		*addr;
+	int			bpp;
+	int			line_length;
+	int			endian;
 	int			win_w;
 	void		*mlx_ptr;
 	void		*win_ptr;
 
 }				t_mlx;
+
+typedef struct s_rays
+{
+	float		x;
+	float		y;
+	float		a;
+	float		b;
+	float		c;
+	float		h;
+	float		angle_left;
+	float		angle_right;
+	float		distance_to_wall;
+	float		horizontal_distance;
+	float		vertical_distance;
+
+}				t_rays;
 
 typedef struct s_cub
 {
@@ -138,6 +166,7 @@ void			print2d_array(char **array);
 void			print_and_exit_specs(char *str, t_specs *specs);
 void			print_and_exit_map(char *str, t_map *map, char **line);
 int				key_hook(int keycode, t_cub *cub);
+void			get_map_parameters(t_map *map, char **array);
 // checks
 void			first_check(int argc, char *argv[]);
 void			check_map_path(char *path);
@@ -156,6 +185,13 @@ void			check_players(char **array, t_map *map);
 // exit
 int				end_game(t_cub *cub);
 // render
-int			render(t_cub *cub);
-void	launch_rays(t_player *player, t_map *map);
+int				render(t_cub *cub);
+void			launch_rays(t_player *player, t_map *map, t_rays *rays,
+					float angle);
+void			my_mlx_pixel_put(t_mlx *mlx, int x, int y, int color);
+void			render_walls(t_mlx *mlx, t_rays *rays, int x);
+void			horizontal_angle(t_map *map, t_rays *rays, float angle,
+					int quarter);
+void			vertical_angle(t_map *map, t_rays *rays, float angle,
+					int quarter);
 #endif

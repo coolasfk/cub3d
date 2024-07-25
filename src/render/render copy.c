@@ -19,11 +19,11 @@ int	render(t_cub *cub)
 		printf("comparing: horizontal: %f, vertical: %f\n",
 			rays->horizontal_distance, rays->vertical_distance);
 		render_walls(cub->mlx, rays, i);
-		// angle += 2 * PI / 180;
-		angle += FOV / SCREEN_W;
+		// angle += 3 * PI / 180;
+		angle += FOV / SCREEN_W * 2;
 		printf("wall distance %f\n\n\n", rays->distance_to_wall);
 		// i += 30;
-		i ++;
+		i += 2;
 	}
 	free(rays);
 	mlx_put_image_to_window(cub->mlx->mlx_ptr, cub->mlx->win_ptr, cub->mlx->img,
@@ -79,7 +79,6 @@ void	render_walls(t_mlx *mlx, t_rays *rays, int x)
 
 void	launch_rays(t_player *player, t_map *map, t_rays *rays, float angle)
 {
-	// print2d_array(map->map2d);
 	rays->x = player->player_x - 0.5;
 	rays->y = player->player_y - 0.5;
 	if (angle >= PI + (PI / 2))
@@ -93,22 +92,19 @@ void	launch_rays(t_player *player, t_map *map, t_rays *rays, float angle)
 			rays->distance_to_wall = rays->vertical_distance;
 		else
 			rays->distance_to_wall = rays->horizontal_distance;
-		rays->distance_to_wall *= cos(angle);
-	
+		rays->distance_to_wall *= cos((PI / 2 - angle) * (PI / 90.0));
 	}
 	else if (angle < PI / 2)
 	{
 		// printf("--------------------------------------------------second quarter\n");
 		printf("angle2: %f\n", (angle * 180.0 / PI));
 		vertical_angle(map, rays, angle, 2);
-		printf("\n");
 		horizontal_angle(map, rays, angle, 2);
-		printf("\n");
 		if (rays->horizontal_distance > rays->vertical_distance)
 			rays->distance_to_wall = rays->vertical_distance;
 		else
 			rays->distance_to_wall = rays->horizontal_distance;
-			rays->distance_to_wall *= cos(angle);
+		rays->distance_to_wall *= cos((PI / 2 - angle) * (PI / 90.0));
 	}
 	else if (angle >= (PI / 2) && angle < PI)
 	{
@@ -143,39 +139,37 @@ void	vertical_angle(t_map *map, t_rays *rays, float angle, int quarter)
 	{
 		rays->vertical_distance = rays->b / cos(angle);
 		rays->a = sin(angle) * rays->vertical_distance;
-		printf("Vertical: /\\- A: %f, B: %f, C: %f\n", rays->a, rays->b,
-			rays->vertical_distance);
+		// printf("V--- checking A: %f, B: %f, C: %f\n", rays->a, rays->b,
+		// rays->vertical_distance);
 		// printf("2V values check: %d y: %d\n", (int)(rays->x + rays->b),
 		//(int)(rays->y + rays->a));
 		if (quarter == 1)
 		{
-			if ((int)(rays->x - rays->a + 0.5) < 0 || (int)(rays->y
-					+ rays->b + 0.5) > map->map_width)
+			if ((int)(rays->x - rays->a) < 0 || (int)(rays->y
+					+ rays->b) > map->map_width)
 			{
 				rays->horizontal_distance = 2147483647;
 				return ;
 			}
-			// printf("values check  original X: %d Y:%d\n", (int)rays->x,
-				//(int)rays->y);
-			printf("1V values check: +++++ %d y: %d\n", (int)(rays->x
-					- rays->a + 0.5), (int)(rays->y + rays->b + 0.5));
-			box = map->map2d[(int)(rays->x - rays->a + 0.5)][(int)(rays->y
-					+ rays->b + 0.5)];
+			// printf("values check x: %f y:%f\n", rays->x, rays->y);
+			// printf("1V values check: %d y: %d\n", (int)(rays->x - rays->a),
+			//(int)(rays->y + rays->b));
+			box = map->map2d[(int)(rays->x - rays->a + 1)][(int)(rays->y
+					+ rays->b) + 1];
 		}
 		else if (quarter == 2)
 		{
-			if ((int)(rays->x + rays->a + 0.5) >= map->map_height || (int)(rays->y
-					+ rays->b + 0.5) > map->map_width)
+			if ((int)(rays->x + rays->a) >= map->map_height || (int)(rays->y
+					+ rays->b) > map->map_width)
 			{
-
 				rays->horizontal_distance = 2147483647;
 				return ;
 			}
-			// printf("check x: %f, check y: %f\n", rays->x, rays->y);
-			//printf("---------------im checking the field: x: %d y: %d\n",
-				//(int)(rays->x + rays->a), (int)(rays->y + rays->b) + 1);
-			box = map->map2d[(int)(rays->x + rays->a + 0.5)][(int)(rays->y
-					+ rays->b + 0.5)];
+			printf("check x: %f, check y: %f\n", rays->x, rays->y);
+			printf("---------------2V values check: x: %d y: %d\n",
+				(int)(rays->x + rays->a) + 1, (int)(rays->y + rays->b));
+			box = map->map2d[(int)(rays->x + rays->a)][(int)(rays->y + rays->b)
+				+ 1];
 		}
 		else if (quarter == 3)
 		{
@@ -214,34 +208,33 @@ void	horizontal_angle(t_map *map, t_rays *rays, float angle, int quarter)
 		rays->b = cos(angle) * rays->horizontal_distance;
 		printf("H--- checking A: %f, B: %f, C: %f\n", rays->a, rays->b,
 			rays->horizontal_distance);
-		
+		// printf("1H values check: %d y: %d\n", (int)(rays->x - rays->b),
+		//(int)(rays->y + rays->a));
 		if (quarter == 1)
 		{
-			if ((int)(rays->x - rays->a - 0.5) < 0 || (int)(rays->y + rays->b
-					- 0.5) > map->map_width)
+			if ((int)(rays->x - rays->a) < 0 || (int)(rays->y
+					+ rays->b) > map->map_width)
 			{
 				rays->horizontal_distance = 2147483647;
 				return ;
 			}
-			printf("1H checking the fields: %d y: %d\n", (int)(rays->x - rays->a + 0.5),
-		(int)(rays->y + rays->b - 0.5));
-			printf("rays->x: %f, rays->y: %f\n", rays->x, rays->y);
-			box = map->map2d[(int)(rays->x - rays->a - 0.5)][(int)(rays->y
-					+ rays->b + 0.5)];
+			// printf("rays->x: %f, rays->y: %f\n", rays->x, rays->y);
+			box = map->map2d[(int)(rays->x - rays->a)][(int)(rays->y
+					+ rays->b)];
 		}
 		else if (quarter == 2)
 		{
-			if ((int)(rays->x + rays->a) + 0.5 >= map->map_height
-				|| (int)(rays->y + rays->b) > map->map_width)
+			if ((int)(rays->x + rays->a) >= map->map_height || (int)(rays->y
+					+ rays->b) > map->map_width)
 			{
 				rays->horizontal_distance = 2147483647;
 				return ;
 			}
-			//printf("2Horizontal values check ++ : x:%d y: %d\n", ((int)(rays->x
-						//+ rays->a + 0.5)), (int)(rays->y + rays->b));
-			// printf("original X: %d, Y: %d\n", rays->x, rays->y);
-			box = map->map2d[(int)(rays->x + rays->a + 0.5)][(int)(rays->y
-					+ rays->b + 0.5)];
+			printf("2h values check: x:%d y: %d\n", ((int)(rays->x + rays->a)+1),
+				(int)(rays->y + rays->b));
+			printf("original rays->x: %f, rays->y: %f\n", rays->x, rays->y);
+			box = map->map2d[(int)(rays->x + rays->a) + 1][(int)(rays->y
+					+ rays->b)];
 		}
 		else if (quarter == 3)
 		{
