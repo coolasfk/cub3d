@@ -12,8 +12,8 @@
 
 //# define SCREEN_H 768
 //# define SCREEN_W 1024
-# define SCREEN_H 768
-# define SCREEN_W 1024
+# define SCREEN_H 300
+# define SCREEN_W 500
 # define FOV (PI / 2)
 # define WALL 3.0f
 # define GRID_SIZE 64
@@ -167,6 +167,7 @@ void			print_and_exit_specs(char *str, t_specs *specs);
 void			print_and_exit_map(char *str, t_map *map, char **line);
 int				key_hook(int keycode, t_cub *cub);
 void			get_map_parameters(t_map *map, char **array);
+void	fix_fisheye(float *distance, int i);
 // checks
 void			first_check(int argc, char *argv[]);
 void			check_map_path(char *path);
