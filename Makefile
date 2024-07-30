@@ -28,7 +28,8 @@ SRC = main.c \
 	  src/utils/printing_checks.c \
 	  src/utils/clean_exit.c \
 	  src/utils/check_map.c \
-	  src/render/render.c
+	  src/render/render.c \
+	  src/utils/rgb_to_hex.c
 
 DODIR = dofile
 

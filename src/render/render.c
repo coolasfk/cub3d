@@ -8,8 +8,7 @@ int	render(t_cub *cub)
 
 	i = 0;
 	rays = allocate_memory(0, RAYS, &cub->type);
-	// angle = cub->player->facing + PI;
-	angle = PI + PI/57;
+	angle = PI + PI / 57;
 	while (i < SCREEN_W)
 	{
 		if (angle < 0)
@@ -19,21 +18,21 @@ int	render(t_cub *cub)
 		// printf("------angle render  check %f\n", angle * 180 / PI);
 		launch_rays(cub->player, cub->map, rays, angle);
 		// printf("comparing: horizontal: %f, vertical: %f\n",
-			//rays->horizontal_distance, rays->vertical_distance);
-			if (rays->horizontal_distance > rays->vertical_distance)
-				rays->distance_to_wall = rays->vertical_distance;
-			else
-				rays->distance_to_wall = rays->horizontal_distance;
-			// rays->distance_to_wall *= cos(angle);
-			fix_fisheye(&rays->distance_to_wall, i);
-			render_walls(cub->mlx, rays, i);
-			// angle += 2 * PI / 180;
-			// angle += FOV / SCREEN_W * 4;
-			angle += FOV / SCREEN_W;
-			// printf("wall distance %f\n\n\n", rays->distance_to_wall);
-			// i += 30;
-			// i += 4;
-			i++;
+		// rays->horizontal_distance, rays->vertical_distance);
+		if (rays->horizontal_distance > rays->vertical_distance)
+			rays->distance_to_wall = rays->vertical_distance;
+		else
+			rays->distance_to_wall = rays->horizontal_distance;
+		// rays->distance_to_wall *= cos(angle);
+		fix_fisheye(&rays->distance_to_wall, i);
+		render_walls(cub->mlx, rays, i, cub->specs);
+		// angle += 2 * PI / 180;
+		// angle += FOV / SCREEN_W * 4;
+		angle += FOV / SCREEN_W;
+		// printf("wall distance %f\n\n\n", rays->distance_to_wall);
+		// i += 30;
+		// i += 4;
+		i++;
 	}
 	free(rays);
 	mlx_put_image_to_window(cub->mlx->mlx_ptr, cub->mlx->win_ptr, cub->mlx->img,
@@ -57,18 +56,20 @@ void	my_mlx_pixel_put(t_mlx *mlx, int x, int y, int color)
 {
 	char	*dst;
 
+	//printf("Combined hex color: 0x%06X\n", color);
+		// Print the result in hex format
 	if (x < 0 || x >= SCREEN_W || y < 0 || y >= SCREEN_H)
 		return ;
 	dst = mlx->addr + (y * mlx->line_length + x * (mlx->bpp / 8));
 	*(unsigned int *)dst = color;
 }
 
-void	render_walls(t_mlx *mlx, t_rays *rays, int x)
+void	render_walls(t_mlx *mlx, t_rays *rays, int x, t_specs *specs)
 {
 	int	wall_height;
 	int	draw_start;
 	int	draw_end;
-
+	int y;
 	wall_height = (int)(PROJ_PLANE_DIST / rays->distance_to_wall);
 	draw_start = -wall_height / 2 + SCREEN_H / 2;
 	draw_end = wall_height / 2 + SCREEN_H / 2;
@@ -76,17 +77,24 @@ void	render_walls(t_mlx *mlx, t_rays *rays, int x)
 		draw_start = 0;
 	if (draw_end >= SCREEN_H)
 		draw_end = SCREEN_H - 1;
-	for (int y = draw_start; y < draw_end; y++)
+	y = draw_start;
+	while (y < draw_end)
 	{
+		printf("yyy check %d\n", y);
 		my_mlx_pixel_put(mlx, x, y, 0xFFFFFF);
+		y++;
 	}
-	for (int y = draw_end; y < SCREEN_H; y++)
+	y = draw_end;
+	while (y < SCREEN_H)
 	{
-		my_mlx_pixel_put(mlx, x, y, 0x808080);
+		my_mlx_pixel_put(mlx, x, y, specs->floor_color);
+		y++;
 	}
-	for (int y = 0; y < draw_start; y++)
+	y = 0;
+	while (y < draw_start)
 	{
-		my_mlx_pixel_put(mlx, x, y, 0x0000FF);
+		my_mlx_pixel_put(mlx, x, y, specs->ceil_color);
+		y++;
 	}
 }
 
@@ -115,14 +123,14 @@ void	launch_rays(t_player *player, t_map *map, t_rays *rays, float angle)
 	else if (angle >= (PI / 2) && angle < PI)
 	{
 		angle = PI - angle;
-		//printf("angle3: %f\n", (angle * 180.0 / PI));
+		// printf("angle3: %f\n", (angle * 180.0 / PI));
 		vertical_angle(map, rays, angle, 3);
 		horizontal_angle(map, rays, angle, 3);
 	}
 	else if (angle >= PI && angle < PI + PI / 2)
 	{
 		angle = angle - PI;
-		//printf("angle4: %f\n", (angle * 180.0 / PI));
+		// printf("angle4: %f\n", (angle * 180.0 / PI));
 		vertical_angle(map, rays, angle, 4);
 		horizontal_angle(map, rays, angle, 4);
 	}

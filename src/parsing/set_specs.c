@@ -12,6 +12,8 @@ t_specs	*set_specs(char *path)
 	specs->rows = 0;
 	parse_cub_file_specs(path, specs, type);
 	check_specs(specs);
+	change_rgb_to_hex(&specs->floor_color, specs->floor);
+	change_rgb_to_hex(&specs->ceil_color, specs->ceil);
 	return (specs);
 }
 
@@ -58,12 +60,12 @@ void	check_line2(char *line, t_specs *specs, int *flag)
 		i++;
 	if (*flag == 0 && line[i] == '1')
 		*flag = 1;
-	if(*flag == 1 && (line[i] != '1') && (line[i] != '\n') && (line[i] != '\0'))
+	if (*flag == 1 && (line[i] != '1') && (line[i] != '\n')
+		&& (line[i] != '\0'))
 	{
 		printf("line[i] check%c\n", line[i]);
-print_and_exit_specs("Error: map error 3.", specs);
+		print_and_exit_specs("Error: map error 3.", specs);
 	}
-	
 }
 
 void	check_line(char *line, t_specs *specs, t_type *type)
@@ -97,57 +99,14 @@ void	check_line(char *line, t_specs *specs, t_type *type)
 	else if (line[i] == 'F' && line[i + 1] == 32)
 	{
 		specs->floor_spec = get_path(line, specs->floor_spec, type, 0);
-		printf("checking floor_spec: %s\n", specs->floor_spec);
-		get_rgb(specs->floor_spec, &specs->floor, type);
+		get_rgb(&specs->floor_spec, &specs->floor, type, specs);
 	}
 	else if (line[i] == 'C' && line[i + 1] == 32)
 	{
 		specs->ceil_spec = get_path(line, specs->ceil_spec, type, 0);
-		get_rgb(specs->ceil_spec, &specs->ceil, type);
+		get_rgb(&specs->ceil_spec, &specs->ceil, type, specs);
+		printf("checking ceil_spec: %s\n", specs->ceil_spec);
 	}
-}
-
-void	get_rgb(char *str, t_rgb **rgb, t_type *type)
-{
-	int		i;
-	char	temp[4];
-	int		k;
-
-	i = 0;
-	k = 0;
-	*rgb = allocate_memory(0, RGB, type);
-	while (str[i] != ',' && str[i] != '\0')
-		temp[k++] = str[i++];
-	temp[k] = '\0';
-	(*rgb)->r = ft_atoi(temp);
-	printf("Rrgb->r check %d\n", (*rgb)->r);
-	k = 0;
-	i++;
-	while (str[i] != ',' && str[i] != '\0')
-		temp[k++] = str[i++];
-	temp[k] = '\0';
-	(*rgb)->g = ft_atoi(temp);
-	printf("Grgb->g check %d\n", (*rgb)->g);
-	k = 0;
-	i++;
-	while (str[i] != ' ' && (!(str[i] >= 9 && str[i] <= 13)) && str[i] != '\0')
-		temp[k++] = str[i++];
-	temp[k] = '\0';
-	(*rgb)->b = ft_atoi(temp);
-	printf("Brgb->b check %d\n", (*rgb)->b);
-	if (rgb_check((*rgb)->r) || rgb_check((*rgb)->g) || rgb_check((*rgb)->b))
-	{
-		printf("Error: rgb values are not correct\n");
-		exit(1);
-	}
-}
-
-int	rgb_check(int num)
-{
-	if (num >= 0 && num <= 255)
-		return (0);
-	printf("incorrect: %d\n", num);
-	return (1);
 }
 
 char	*get_path(char *line, char *new, t_type *type, int k)
@@ -180,11 +139,13 @@ char	*get_path(char *line, char *new, t_type *type, int k)
 
 void	check_specs(t_specs *specs)
 {
+	int	fd;
+
 	/*
-	to be switched on later!!!!! */int fd;
+	to be switched on later!!!!! */
 	fd = 0;
 	if (!specs->n_spec || !specs->s_spec || !specs->e_spec || !specs->w_spec
-		|| !specs->floor || !specs->ceil)
+		|| !specs->ceil_spec || !specs->floor_spec)
 	{
 		printf("Error: some of the specifications are missing2.\n");
 		exit(1);
@@ -202,5 +163,66 @@ void	check_specs(t_specs *specs)
 		print_and_exit_specs("Error: cannot open the file3.", specs);
 	fd = open(specs->w_spec, O_RDONLY);
 	if (fd < 0)
-	print_and_exit_specs("Error: cannot open the file4.", specs);
+		print_and_exit_specs("Error: cannot open the file4.", specs);
+}
+
+void	get_rgb(char **str, t_rgb **rgb, t_type *type, t_specs *specs)
+{
+	int		i;
+	int		k;
+	char	temp[4];
+	t_rgb	*current;
+
+	i = 0;
+	specs->ptr = NULL;
+	printf("179 check\n");
+	while ((*str)[i] != '\0')
+	{
+		printf("182 check\n");
+		k = 0;
+		current = allocate_memory(0, RGB, type);
+		while ((*str)[i] != ',' && !((*str)[i] >= 9 && (*str)[i] <= 13)
+			&& (*str)[i] != '\0')
+			temp[k++] = (*str)[i++];
+		temp[k] = '\0';
+		rgb_check(temp, specs);
+		current->value = ft_atoi(temp);
+		current->next = NULL;
+		if (*rgb == NULL)
+			*rgb = current;
+		else
+			specs->ptr->next = current;
+		specs->ptr = current;
+		while ((*str)[i] == ',' || ((*str)[i] >= 9 && (*str)[i] <= 13))
+			i++;
+	}
+	printf("199 check\n");
+	/*
+	*str = allocate_memory(10, ARRAY, type);
+	change_rgb_to_hex(specs, *rgb, str);*/
+	printf("--------str check: %s\n", *str);
+}
+
+int	rgb_check(char *rgb, t_specs *specs)
+{
+	int	i;
+	int	ret;
+
+	ret = 0;
+	i = 0;
+	while (rgb[i] != '\0')
+		i++;
+	printf("rgb check : %s i : %d, \n", rgb, i);
+	if (i == 0 || i > 3 || (i == 1 && (rgb[0] < '0' || rgb[0] > '9')) || (i == 2
+			&& (rgb[0] < '0' || rgb[0] > '9' || rgb[1] < '0' || rgb[1] > '9'))
+		|| (i == 3 && rgb[0] == '1' && (rgb[1] < '0' || rgb[1] > '9'
+				|| rgb[2] < '0' || rgb[2] > '9')) || (i == 3 && rgb[0] == '2'
+			&& ((rgb[1] < '0' || rgb[1] > '5') || (rgb[2] < '0'
+					|| rgb[2] > '9'))) || (i == 3 && rgb[0] == '2'
+			&& rgb[1] == '5' && (rgb[2] < '0' || rgb[2] > '5')) || (i == 3
+			&& rgb[0] > '2'))
+		ret = 1;
+	if (ret == 1)
+		print_and_exit_specs("Error: wrong RGB values.", specs);
+	return (0);
 }

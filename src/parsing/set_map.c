@@ -1,5 +1,6 @@
 #include "cub3d.h"
 
+
 t_map	*set_map(char *path)
 {
 	static t_map	*map;

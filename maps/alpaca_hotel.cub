@@ -6,8 +6,9 @@ WE texture/room3.xpm
 EA texture/room1.xpm
 S  texture/alpaca.xpm
 
-C     239,  167,47
-F 93,60,45
+C  179, 229, 227
+ 
+F 175, 161, 165
 
 1111111
 1010101
