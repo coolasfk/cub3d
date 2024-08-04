@@ -22,9 +22,17 @@ int	render(t_cub *cub)
 		// printf("comparing: horizontal: %f, vertical: %f\n",
 		// rays->horizontal_distance, rays->vertical_distance);
 		if (cub->rays->horizontal_distance > cub->rays->vertical_distance)
+		{
 			cub->rays->distance_to_wall = cub->rays->vertical_distance;
+			cub->rays->wall_direction = cub->rays->wall_direction_v;
+		}
+			
 		else
+		{
 			cub->rays->distance_to_wall = cub->rays->horizontal_distance;
+			cub->rays->wall_direction = cub->rays->wall_direction_h;
+		}
+			
 		// rays->distance_to_wall *= cos(angle);
 		fix_fisheye(&cub->rays->distance_to_wall, i);
 		render_walls(cub->mlx, cub->rays, i, cub->specs);
@@ -74,7 +82,7 @@ void	render_walls(t_mlx *mlx, t_rays *rays, int x, t_specs *specs)
 	int				tex_x;
 	int tex_y;
 
-	wall_height = (int)(PROJ_PLANE_DIST / rays->distance_to_wall);
+	wall_height = (int)(PLANE / rays->distance_to_wall * 2);
 	draw_start = -wall_height / 2 + SCREEN_H / 2;
 	draw_end = wall_height / 2 + SCREEN_H / 2;
 	if (draw_start < 0)
@@ -84,7 +92,7 @@ void	render_walls(t_mlx *mlx, t_rays *rays, int x, t_specs *specs)
 	y = draw_start;
 	printf("wall_height %d\n", wall_height);
 	tex_x = x;
-	tex_y = 0;
+	tex_y = 1/100;
 	while (y < draw_end)
 	{
 		if (rays->wall_direction == 'N')
@@ -188,7 +196,7 @@ void	vertical_angle(t_map *map, t_rays *rays, float angle, int quarter)
 			if ((int)(rays->x - rays->a) < 0 || (int)(rays->y
 					+ rays->b) > map->map_width)
 				return ;
-			rays->wall_direction = 'E';
+			rays->wall_direction_v = 'E';
 			// printf("values check  original X: %d Y:%d\n", (int)rays->x,
 			//(int)rays->y);
 			/*printf("1V values check: +++++ %d y: %d\n", (int)(rays->x
@@ -201,7 +209,7 @@ void	vertical_angle(t_map *map, t_rays *rays, float angle, int quarter)
 			if ((int)(rays->x + rays->a) >= map->map_height || (int)(rays->y
 					+ rays->b) > map->map_width)
 				return ;
-			rays->wall_direction = 'E';
+			rays->wall_direction_v = 'E';
 			// printf("check x: %f, check y: %f\n", rays->x, rays->y);
 			// printf("---------------im checking the field: x: %d y: %d\n",
 			//(int)(rays->x + rays->a), (int)(rays->y + rays->b) + 1);
@@ -213,7 +221,7 @@ void	vertical_angle(t_map *map, t_rays *rays, float angle, int quarter)
 			if ((int)(rays->x + rays->a) >= map->map_height || (int)(rays->y
 					- rays->b - 1) < 0)
 				return ;
-			rays->wall_direction = 'W';
+			rays->wall_direction_v = 'W';
 			box = map->map2d[(int)(rays->x + rays->a)][(int)(rays->y - rays->b
 					- 1)];
 		}
@@ -222,7 +230,7 @@ void	vertical_angle(t_map *map, t_rays *rays, float angle, int quarter)
 			if ((int)(rays->x - rays->a) < 0 || (int)(rays->y - rays->b
 					- 1) < 0)
 				return ;
-			rays->wall_direction = 'W';
+			rays->wall_direction_v = 'W';
 			// printf("-vetical--------------im checking the field: x: %d y:
 			//%d\n",
 			//(int)(rays->x - rays->a), (int)(rays->y - rays->b - 1) + 1);
@@ -258,7 +266,7 @@ void	horizontal_angle(t_map *map, t_rays *rays, float angle, int quarter)
 			if ((int)(rays->x - rays->a - 1) < 0 || (int)(rays->y
 					+ rays->b) > map->map_width)
 				return ;
-			rays->wall_direction = 'S';
+			rays->wall_direction_h = 'S';
 			/*printf("1H checking the fields: %d y: %d\n", (int)(rays->x
 					- rays->a), (int)(rays->y + rays->b + 1));
 			printf("rays->x: %f, rays->y: %f\n", rays->x, rays->y);*/
@@ -272,7 +280,7 @@ void	horizontal_angle(t_map *map, t_rays *rays, float angle, int quarter)
 			{
 				return ;
 			}
-			rays->wall_direction = 'N';
+			rays->wall_direction_h = 'N';
 			// printf("2Horizontal values check ++ : x:%d y: %d\n",
 			//((int)(rays->x
 			//+ rays->a + 0.5)), (int)(rays->y + rays->b));
@@ -285,7 +293,7 @@ void	horizontal_angle(t_map *map, t_rays *rays, float angle, int quarter)
 			if ((int)(rays->x + rays->a) > map->map_height || (int)(rays->y
 					- rays->b < 0))
 				return ;
-			rays->wall_direction = 'N';
+			rays->wall_direction_h = 'N';
 			box = map->map2d[(int)(rays->x + rays->a)][(int)(rays->y
 					- rays->b)];
 		}
@@ -294,7 +302,7 @@ void	horizontal_angle(t_map *map, t_rays *rays, float angle, int quarter)
 			if ((int)(rays->x - rays->a - 1) < 0 || (int)(rays->y
 					- rays->b) > map->map_width)
 				return ;
-			rays->wall_direction = 'S';
+			rays->wall_direction_h = 'S';
 			/*printf("--horizontal-------------im checking the field: x: %d y:
 				%d\n", (int)(rays->x - rays->a - 1), (int)(rays->y
 					- rays->b));*/

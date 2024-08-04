@@ -15,8 +15,8 @@
 # define FOV (PI / 2)
 # define WALL 3.0f
 # define GRID_SIZE 64
-# define PROJ_PLANE_DIST (SCREEN_W / (2.0 * tan(FOV / 2.0)))
-
+//# define PROJ_PLANE_DIST (SCREEN_W / (2.0 * tan(FOV / 2.0)))
+# define PLANE 512
 # define NORTH_TEX 0
 # define WEST_TEX 1
 # define SOUTH_TEX 2
@@ -132,6 +132,8 @@ typedef struct s_rays
 	float			c;
 	float			h;
 	char			wall_direction;
+	char			wall_direction_v;
+	char			wall_direction_h;
 	float			angle_left;
 	float			angle_right;
 	float			distance_to_wall;
