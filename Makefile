@@ -29,7 +29,8 @@ SRC = main.c \
 	  src/utils/clean_exit.c \
 	  src/utils/check_map.c \
 	  src/render/render.c \
-	  src/utils/rgb_to_hex.c
+	  src/utils/rgb_to_hex.c \
+	  src/render/move.c
 
 DODIR = dofile
 

@@ -24,12 +24,32 @@ t_mlx	*init_mlx(t_mlx *mlx, t_cub *cub)
 		printf("Error: mlx_init error.\n");
 		return (NULL);
 	}
+	printf("---cub specs check %s\n", cub->specs->s_spec);
 	mlx->img = mlx_new_image(mlx->mlx_ptr, SCREEN_W, SCREEN_H);
-	mlx->addr = mlx_get_data_addr(mlx->img, &mlx->bpp, &mlx->line_length,
-			&mlx->endian);
-	mlx_key_hook(cub->mlx->win_ptr, key_hook, &cub);
-	mlx_hook(cub->mlx->win_ptr, 17, 0, end_game, &cub);
+	mlx->addr[IMG] = mlx_get_data_addr(mlx->img, &mlx->bpp[IMG],
+			&mlx->line_length[IMG], &mlx->endian[IMG]);
+	//mlx->north_tex = mlx_xpm_file_to_image(mlx->mlx_ptr, cub->specs->n_spec,
+			//&mlx->width, &mlx->height);
+				mlx->north_tex = mlx_xpm_file_to_image(mlx->mlx_ptr, "assets/north100x.xpm",
+			&mlx->width, &mlx->height);
+	mlx->addr[NORTH_TEX] = mlx_get_data_addr(mlx->north_tex, &mlx->bpp[NORTH_TEX],
+			&mlx->line_length[NORTH_TEX], &mlx->endian[NORTH_TEX]);
+	mlx->south_tex = mlx_xpm_file_to_image(mlx->mlx_ptr, cub->specs->s_spec,
+			&mlx->width, &mlx->height);
+		mlx->addr[SOUTH_TEX] = mlx_get_data_addr(mlx->south_tex, &mlx->bpp[SOUTH_TEX],
+			&mlx->line_length[SOUTH_TEX], &mlx->endian[SOUTH_TEX]);
+	mlx->east_tex = mlx_xpm_file_to_image(mlx->mlx_ptr, cub->specs->e_spec,
+			&mlx->width, &mlx->height);
+		mlx->addr[EAST_TEX] = mlx_get_data_addr(mlx->east_tex, &mlx->bpp[EAST_TEX],
+			&mlx->line_length[EAST_TEX], &mlx->endian[EAST_TEX]);
+	mlx->west_tex = mlx_xpm_file_to_image(mlx->mlx_ptr, cub->specs->w_spec,
+			&mlx->width, &mlx->height);
+	mlx->addr[WEST_TEX] = mlx_get_data_addr(mlx->west_tex, &mlx->bpp[WEST_TEX],
+			&mlx->line_length[WEST_TEX], &mlx->endian[WEST_TEX]);
 	render(cub);
+	printf("INIT MLX check this player: %f\n", cub->player->player_y);
+	mlx_hook(cub->mlx->win_ptr, 17, 0, end_game, cub);
+	mlx_key_hook(mlx->win_ptr, key_hook, cub);
 	mlx_loop(mlx->mlx_ptr);
 	return (mlx);
 }
@@ -43,9 +63,12 @@ int	end_game(t_cub *cub)
 	exit(0);
 	return (0);
 }
-
+/*
 int	key_hook(int keycode, t_cub *cub)
 {
+	void	*img;
+	char	*address;
+
 	if (keycode == KEY_W)
 		printf("key 13 is pressed\n");
 	if (keycode == KEY_A)
@@ -58,14 +81,10 @@ int	key_hook(int keycode, t_cub *cub)
 		end_game(cub);
 	mlx_clear_window(cub->mlx->mlx_ptr, cub->mlx->win_ptr);
 	return (0);
-}
-
+}*/
 /*
 nt	launch_game(void)
 {
-	void	*img;
-	char	*address;
-
 	img = mlx_new_image(data()->mlx, SCREEN_WIDTH, SCREEN_HEIGHT);
 	data()->img.pointer_to_image = img;
 	address = mlx_get_data_address(data()->img.pointer_to_image, \

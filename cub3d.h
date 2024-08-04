@@ -10,17 +10,19 @@
 # define KEY_LEFT 123
 # define KEY_RIGHT 124
 
-//# define SCREEN_H 768
-//# define SCREEN_W 1024
-# define SCREEN_H 300
-# define SCREEN_W 500
+# define SCREEN_H 768
+# define SCREEN_W 1024
 # define FOV (PI / 2)
 # define WALL 3.0f
 # define GRID_SIZE 64
 # define PROJ_PLANE_DIST (SCREEN_W / (2.0 * tan(FOV / 2.0)))
 
-# define TEXTURE_H 64
-# define TEXTURE_W 64
+# define NORTH_TEX 0
+# define WEST_TEX 1
+# define SOUTH_TEX 2
+# define EAST_TEX 3
+# define IMG 4
+# define EPSILON 0.0001
 
 # include "libft/libft.h"
 # include "minilibx/mlx.h"
@@ -104,13 +106,20 @@ typedef struct s_mlx
 {
 	int				win_h;
 	void			*img;
-	char			*addr;
-	int				bpp;
-	int				line_length;
-	int				endian;
+	char			*addr[5];
+	int				bpp[5];
+	int				line_length[5];
+	int				endian[5];
 	int				win_w;
 	void			*mlx_ptr;
 	void			*win_ptr;
+	void			*north_tex;
+	void			*west_tex;
+	void			*south_tex;
+	void			*east_tex;
+	int				width;
+	int				height;
+	int				texture;
 
 }					t_mlx;
 
@@ -122,6 +131,7 @@ typedef struct s_rays
 	float			b;
 	float			c;
 	float			h;
+	char			wall_direction;
 	float			angle_left;
 	float			angle_right;
 	float			distance_to_wall;
@@ -134,6 +144,7 @@ typedef struct s_rays
 
 typedef struct s_cub
 {
+	t_rays			*rays;
 	t_type			type;
 	t_specs			*specs;
 	t_map			*map;
