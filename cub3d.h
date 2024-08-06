@@ -22,6 +22,8 @@
 # define SOUTH_TEX 2
 # define EAST_TEX 3
 # define IMG 4
+# define TEXTURE_HEIGHT 100
+# define TEXTURE_WIDTH 100
 # define EPSILON 0.0001
 
 # include "libft/libft.h"
@@ -141,6 +143,9 @@ typedef struct s_rays
 	float			vertical_distance;
 	char			*rgb_floor;
 	char			*rgb_ceil;
+	float			wall_hit;
+	float			wall_hit_v;
+	float			wall_hit_h;
 
 }					t_rays;
 

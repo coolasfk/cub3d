@@ -30,7 +30,7 @@ t_mlx	*init_mlx(t_mlx *mlx, t_cub *cub)
 			&mlx->line_length[IMG], &mlx->endian[IMG]);
 	//mlx->north_tex = mlx_xpm_file_to_image(mlx->mlx_ptr, cub->specs->n_spec,
 			//&mlx->width, &mlx->height);
-				mlx->north_tex = mlx_xpm_file_to_image(mlx->mlx_ptr, "assets/north100x.xpm",
+				mlx->north_tex = mlx_xpm_file_to_image(mlx->mlx_ptr, cub->specs->n_spec,
 			&mlx->width, &mlx->height);
 	mlx->addr[NORTH_TEX] = mlx_get_data_addr(mlx->north_tex, &mlx->bpp[NORTH_TEX],
 			&mlx->line_length[NORTH_TEX], &mlx->endian[NORTH_TEX]);
