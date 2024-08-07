@@ -87,22 +87,22 @@ void	render_walls(t_mlx *mlx, t_rays *rays, int x, t_specs *specs)
 	int		texture_height;
 	int		d;
 
-	wall_height = (int)(PLANE / rays->distance_to_wall);
+	wall_height = (int)(PLANE / rays->distance_to_wall * 1.6);
 	draw_start = -wall_height / 2 + SCREEN_H / 2;
 	draw_end = wall_height / 2 + SCREEN_H / 2;
 	if (draw_start < 0)
 		draw_start = 0;
 	if (draw_end >= SCREEN_H)
 		draw_end = SCREEN_H - 1;
-	tex_x = (int)((rays->wall_hit - floor(rays->wall_hit)) * TEXTURE_WIDTH);
 	if (rays->wall_direction == 'N')
 	{
 		mlx->texture = NORTH_TEX;
 	}
 	else if (rays->wall_direction == 'S')
 	{
-		tex_x = TEXTURE_WIDTH - tex_x;
 		mlx->texture = SOUTH_TEX;
+		tex_x = mlx->width[mlx->texture] - ((int)((rays->wall_hit - floor(rays->wall_hit))
+				* mlx->width[mlx->texture]));
 	}
 	else if (rays->wall_direction == 'E')
 	{
@@ -112,7 +112,13 @@ void	render_walls(t_mlx *mlx, t_rays *rays, int x, t_specs *specs)
 	{
 		mlx->texture = WEST_TEX;
 	}
-	texture_height = TEXTURE_HEIGHT;
+	tex_x = (int)((rays->wall_hit - floor(rays->wall_hit))
+			* mlx->width[mlx->texture]);
+	
+
+	
+	
+	texture_height = mlx->height[mlx->texture];
 	tex_y = 0;
 	// printf("line 115 render walls \n");
 	y = draw_start;
@@ -120,10 +126,10 @@ void	render_walls(t_mlx *mlx, t_rays *rays, int x, t_specs *specs)
 	{
 		d = (y - SCREEN_H / 2 + wall_height / 2) * texture_height;
 		// printf("line 120 render walls, d: %d, y: %d, wall_height: %d\n", d,
-			//y, wall_height);
+		// y, wall_height);
 		tex_y = d / wall_height;
 		// printf("line 122 render walls, tex_y: %f, tex_x: %d \n", tex_y,
-			//tex_x);
+		// tex_x);
 		pixel = mlx->addr[mlx->texture]
 			+ ((int)(tex_y)*mlx->line_length[mlx->texture] + tex_x
 				* (mlx->bpp[mlx->texture] / 8));

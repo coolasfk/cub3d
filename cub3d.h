@@ -15,15 +15,12 @@
 # define FOV (PI / 2)
 # define WALL 3.0f
 # define GRID_SIZE 64
-//# define PROJ_PLANE_DIST (SCREEN_W / (2.0 * tan(FOV / 2.0)))
 # define PLANE 512
 # define NORTH_TEX 0
 # define WEST_TEX 1
 # define SOUTH_TEX 2
 # define EAST_TEX 3
 # define IMG 4
-# define TEXTURE_HEIGHT 100
-# define TEXTURE_WIDTH 100
 # define EPSILON 0.0001
 
 # include "libft/libft.h"
@@ -119,8 +116,8 @@ typedef struct s_mlx
 	void			*west_tex;
 	void			*south_tex;
 	void			*east_tex;
-	int				width;
-	int				height;
+	int				width[4];
+	int				height[4];
 	int				texture;
 
 }					t_mlx;

@@ -1,9 +1,9 @@
 R  1500 1000
 
-NO assets/north100x.xpm
-SO assets/south100x.xpm
-WE assets/west100x.xpm
-EA assets/east100x.xpm
+NO assets/posters.xpm
+SO assets/mountains1.xpm
+WE assets/cube.xpm
+EA assets/opt1-copy.xpm
 
 C  179, 229, 227
  
