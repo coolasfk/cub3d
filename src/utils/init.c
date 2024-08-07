@@ -54,11 +54,6 @@ t_player	*get_player(void)
 
 void	give_player_values(int i, int j, t_player *player)
 {
-	player->player_y = j + 0.5;
-	player->player_x = i + 0.5;
-    player->first_ray = player->facing - (PI/4);
-    player->last_ray = player->facing + (PI/4);
-    player->middle_ray = player->facing;
-
-
+	player->player_y = i + 0.5;
+	player->player_x = j + 0.5;
 }

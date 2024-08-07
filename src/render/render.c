@@ -209,52 +209,52 @@ void	vertical_angle(t_map *map, t_rays *rays, float angle, int quarter)
 		//(int)(rays->y + rays->a));
 		if (quarter == 1)
 		{
-			if ((int)(rays->x - rays->a) < 0 || (int)(rays->y
+			if ((int)(rays->y - rays->a) < 0 || (int)(rays->x
 					+ rays->b) > map->map_width)
 				return ;
 			rays->wall_direction_v = 'E';
-			rays->wall_hit_v = rays->x - rays->a;
+			rays->wall_hit_v = rays->y - rays->a;
 			// printf("values check  original X: %d Y:%d\n", (int)rays->x,
 			//(int)rays->y);
 			/*printf("1V values check: +++++ %d y: %d\n", (int)(rays->x
 					- rays->a), (int)(rays->y + rays->b));*/
-			box = map->map2d[(int)(rays->x - rays->a)][(int)(rays->y
+			box = map->map2d[(int)(rays->y - rays->a)][(int)(rays->x
 					+ rays->b)];
 		}
 		else if (quarter == 2)
 		{
-			if ((int)(rays->x + rays->a) >= map->map_height || (int)(rays->y
+			if ((int)(rays->y + rays->a) >= map->map_height || (int)(rays->x
 					+ rays->b) > map->map_width)
 				return ;
-			rays->wall_hit_v = rays->x + rays->a;
+			rays->wall_hit_v = rays->y + rays->a;
 			rays->wall_direction_v = 'E';
 			// printf("check x: %f, check y: %f\n", rays->x, rays->y);
 			// printf("---------------im checking the field: x: %d y: %d\n",
 			//(int)(rays->x + rays->a), (int)(rays->y + rays->b) + 1);
-			box = map->map2d[(int)(rays->x + rays->a)][(int)(rays->y
+			box = map->map2d[(int)(rays->y + rays->a)][(int)(rays->x
 					+ rays->b)];
 		}
 		else if (quarter == 3)
 		{
-			if ((int)(rays->x + rays->a) >= map->map_height || (int)(rays->y
+			if ((int)(rays->y + rays->a) >= map->map_height || (int)(rays->x
 					- rays->b - 1) < 0)
 				return ;
-			rays->wall_hit_v = rays->x + rays->a;
+			rays->wall_hit_v = rays->y + rays->a;
 			rays->wall_direction_v = 'W';
-			box = map->map2d[(int)(rays->x + rays->a)][(int)(rays->y - rays->b
+			box = map->map2d[(int)(rays->y + rays->a)][(int)(rays->x - rays->b
 					- 1)];
 		}
 		else if (quarter == 4)
 		{
-			if ((int)(rays->x - rays->a) < 0 || (int)(rays->y - rays->b
+			if ((int)(rays->y - rays->a) < 0 || (int)(rays->x - rays->b
 					- 1) < 0)
 				return ;
-			rays->wall_hit_v = rays->x - rays->a;
+			rays->wall_hit_v = rays->y - rays->a;
 			rays->wall_direction_v = 'W';
 			// printf("-vetical--------------im checking the field: x: %d y:
 			//%d\n",
 			//(int)(rays->x - rays->a), (int)(rays->y - rays->b - 1) + 1);
-			box = map->map2d[(int)(rays->x - rays->a)][(int)(rays->y - rays->b
+			box = map->map2d[(int)(rays->y - rays->a)][(int)(rays->x - rays->b
 					- 1)];
 		}
 		if (box == '1')
@@ -283,54 +283,54 @@ void	horizontal_angle(t_map *map, t_rays *rays, float angle, int quarter)
 		//	rays->horizontal_distance);
 		if (quarter == 1)
 		{
-			if ((int)(rays->x - rays->a - 1) < 0 || (int)(rays->y
+			if ((int)(rays->y - rays->a - 1) < 0 || (int)(rays->x
 					+ rays->b) > map->map_width)
 				return ;
 			rays->wall_direction_h = 'N';
-			rays->wall_hit_h = rays->y + rays->b;
+			rays->wall_hit_h = rays->x + rays->b;
 			/*printf("1H checking the fields: %d y: %d\n", (int)(rays->x
 					- rays->a), (int)(rays->y + rays->b + 1));
 			printf("rays->x: %f, rays->y: %f\n", rays->x, rays->y);*/
-			box = map->map2d[(int)(rays->x - rays->a - 1)][(int)(rays->y
+			box = map->map2d[(int)(rays->y - rays->a - 1)][(int)(rays->x
 					+ rays->b)];
 		}
 		else if (quarter == 2)
 		{
-			if ((int)(rays->x + rays->a) >= map->map_height || (int)(rays->y
+			if ((int)(rays->y + rays->a) >= map->map_height || (int)(rays->x
 					+ rays->b) > map->map_width)
 			{
 				return ;
 			}
-			rays->wall_hit_h = rays->y + rays->b;
+			rays->wall_hit_h = rays->x + rays->b;
 			rays->wall_direction_h = 'S';
 			// printf("2Horizontal values check ++ : x:%d y: %d\n",
 			//((int)(rays->x
 			//+ rays->a + 0.5)), (int)(rays->y + rays->b));
 			// printf("original X: %d, Y: %d\n", rays->x, rays->y);
-			box = map->map2d[(int)(rays->x + rays->a)][(int)(rays->y
+			box = map->map2d[(int)(rays->y + rays->a)][(int)(rays->x
 					+ rays->b)];
 		}
 		else if (quarter == 3)
 		{
-			if ((int)(rays->x + rays->a) > map->map_height || (int)(rays->y
+			if ((int)(rays->y + rays->a) > map->map_height || (int)(rays->x
 					- rays->b < 0))
 				return ;
-			rays->wall_hit_h = rays->y - rays->b;
+			rays->wall_hit_h = rays->x - rays->b;
 			rays->wall_direction_h = 'S';
-			box = map->map2d[(int)(rays->x + rays->a)][(int)(rays->y
+			box = map->map2d[(int)(rays->y + rays->a)][(int)(rays->x
 					- rays->b)];
 		}
 		else if (quarter == 4)
 		{
-			if ((int)(rays->x - rays->a - 1) < 0 || (int)(rays->y
+			if ((int)(rays->y - rays->a - 1) < 0 || (int)(rays->x
 					- rays->b) > map->map_width)
 				return ;
-			rays->wall_hit_h = rays->y - rays->b;
+			rays->wall_hit_h = rays->x - rays->b;
 			rays->wall_direction_h = 'N';
 			/*printf("--horizontal-------------im checking the field: x: %d y:
 				%d\n", (int)(rays->x - rays->a - 1), (int)(rays->y
 					- rays->b));*/
-			box = map->map2d[(int)(rays->x - rays->a - 1)][(int)(rays->y
+			box = map->map2d[(int)(rays->y - rays->a - 1)][(int)(rays->x
 					- rays->b)];
 		}
 		if (box == '1')

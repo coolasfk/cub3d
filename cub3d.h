@@ -59,9 +59,6 @@ typedef struct s_player
 {
 	t_type			type;
 	float			facing;
-	float			first_ray;
-	float			middle_ray;
-	float			last_ray;
 	float			player_x;
 	float			player_y;
 }					t_player;
