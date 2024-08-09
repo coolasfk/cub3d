@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   render.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: eprzybyl <eprzybyl@student.42lausanne.c    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/08/09 16:29:56 by eprzybyl          #+#    #+#             */
+/*   Updated: 2024/08/09 17:30:41 by eprzybyl         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 
 int	render(t_cub *cub)
@@ -5,52 +17,43 @@ int	render(t_cub *cub)
 	float	angle;
 	int		i;
 
-	i = 0;
-	angle = cub->player->facing;
-	angle -= PI / 4;
+	i = -1;
+	angle = cub->player->facing - PI / 4;
 	if (angle < 0)
 		cub->player->facing += 2 * PI;
 	if (angle >= 2 * PI)
 		cub->player->facing -= 2 * PI;
-	printf("check cub->player->facing %f\n", angle * 180 / PI);
-	while (i < SCREEN_W)
+	while (++i < SCREEN_W)
 	{
 		if (angle < 0)
 			angle += 2 * PI;
 		if (angle >= 2 * PI)
 			angle -= 2 * PI;
-		// printf("------angle render  check %f\n", angle * 180 / PI);
 		launch_rays(cub->player, cub->map, cub->rays, angle);
-		// printf("comparing: horizontal: %f, vertical: %f\n",
-		// rays->horizontal_distance, rays->vertical_distance);
-		if (cub->rays->horizontal_distance > cub->rays->vertical_distance)
-		{
-			cub->rays->distance_to_wall = cub->rays->vertical_distance;
-			cub->rays->wall_direction = cub->rays->wall_direction_v;
-			cub->rays->wall_hit = cub->rays->wall_hit_v;
-			// printf("vertical\n");
-		}
-		else
-		{
-			cub->rays->distance_to_wall = cub->rays->horizontal_distance;
-			cub->rays->wall_direction = cub->rays->wall_direction_h;
-			cub->rays->wall_hit = cub->rays->wall_hit_h;
-			// printf("horizontal\n");
-		}
-		// rays->distance_to_wall *= cos(angle);
+		update_rays_values(cub->rays);
 		fix_fisheye(&cub->rays->distance_to_wall, i);
 		render_walls(cub->mlx, cub->rays, i, cub->specs);
-		// angle += 2 * PI / 180;
-		// angle += FOV / SCREEN_W * 4;
 		angle += FOV / SCREEN_W;
-		// printf("wall distance %f\n\n\n", rays->distance_to_wall);
-		// i += 30;
-		// i += 4;
-		i++;
 	}
 	mlx_put_image_to_window(cub->mlx->mlx_ptr, cub->mlx->win_ptr, cub->mlx->img,
 		0, 0);
 	return (0);
+}
+
+void	update_rays_values(t_rays *rays)
+{
+	if (rays->horizontal_distance > rays->vertical_distance)
+	{
+		rays->distance_to_wall = rays->vertical_distance;
+		rays->wall_direction = rays->wall_direction_v;
+		rays->wall_hit = rays->hit_v;
+	}
+	else
+	{
+		rays->distance_to_wall = rays->horizontal_distance;
+		rays->wall_direction = rays->wall_direction_h;
+		rays->wall_hit = rays->hit_h;
+	}
 }
 
 void	fix_fisheye(float *distance, int i)
@@ -75,272 +78,202 @@ void	my_mlx_pixel_put(t_mlx *mlx, int x, int y, int color)
 	*(unsigned int *)dst = color;
 }
 
-void	render_walls(t_mlx *mlx, t_rays *rays, int x, t_specs *specs)
+void	calc_texture(t_mlx *mlx, t_rays *rays)
 {
-	int		wall_height;
-	int		draw_start;
-	int		draw_end;
-	int		y;
-	char	*pixel;
-	int		tex_x;
-	float	tex_y;
-	int		texture_height;
-	int		d;
-
-	wall_height = (int)(PLANE / rays->distance_to_wall * 1.6);
-	draw_start = -wall_height / 2 + SCREEN_H / 2;
-	draw_end = wall_height / 2 + SCREEN_H / 2;
-	if (draw_start < 0)
-		draw_start = 0;
-	if (draw_end >= SCREEN_H)
-		draw_end = SCREEN_H - 1;
 	if (rays->wall_direction == 'N')
-	{
 		mlx->texture = NORTH_TEX;
-	}
 	else if (rays->wall_direction == 'S')
 	{
 		mlx->texture = SOUTH_TEX;
-		tex_x = mlx->width[mlx->texture] - ((int)((rays->wall_hit - floor(rays->wall_hit))
-				* mlx->width[mlx->texture]));
+		rays->tex_x = mlx->width[mlx->texture] - ((int)((rays->wall_hit
+						- floor(rays->wall_hit)) * mlx->width[mlx->texture]));
 	}
 	else if (rays->wall_direction == 'E')
-	{
 		mlx->texture = EAST_TEX;
-	}
 	else if (rays->wall_direction == 'W')
 	{
 		mlx->texture = WEST_TEX;
+		rays->tex_x = mlx->width[mlx->texture] - ((int)((rays->wall_hit
+						- floor(rays->wall_hit)) * mlx->width[mlx->texture]));
 	}
-	tex_x = (int)((rays->wall_hit - floor(rays->wall_hit))
-			* mlx->width[mlx->texture]);
-	
-
-	
-	
-	texture_height = mlx->height[mlx->texture];
-	tex_y = 0;
-	// printf("line 115 render walls \n");
-	y = draw_start;
-	while (y < draw_end)
-	{
-		d = (y - SCREEN_H / 2 + wall_height / 2) * texture_height;
-		// printf("line 120 render walls, d: %d, y: %d, wall_height: %d\n", d,
-		// y, wall_height);
-		tex_y = d / wall_height;
-		// printf("line 122 render walls, tex_y: %f, tex_x: %d \n", tex_y,
-		// tex_x);
-		pixel = mlx->addr[mlx->texture]
-			+ ((int)(tex_y)*mlx->line_length[mlx->texture] + tex_x
-				* (mlx->bpp[mlx->texture] / 8));
-		// printf("line 126 render walls, check pixel: %d \n", *(int *)pixel);
-		my_mlx_pixel_put(mlx, x, y, *(unsigned int *)pixel);
-		// printf("line 128 render walls \n");
-		y++;
-	}
-	// printf("line 126 render walls \n");
-	y = draw_end;
-	while (y < SCREEN_H)
-	{
-		my_mlx_pixel_put(mlx, x, y, specs->floor_color);
-		y++;
-	}
-	y = 0;
-	// printf("line 134 render walls \n");
-	while (y < draw_start)
-	{
-		my_mlx_pixel_put(mlx, x, y, specs->ceil_color);
-		y++;
-	}
+	if (mlx->texture != SOUTH_TEX && mlx->texture != WEST_TEX)
+		rays->tex_x = (int)((rays->wall_hit - floor(rays->wall_hit))
+				* mlx->width[mlx->texture]);
+	rays->texture_height = mlx->height[mlx->texture];
+	rays->tex_y = 0;
 }
+
+void	start_variables(t_rays *rays)
+{
+	rays->wall_height = (int)(PLANE / rays->distance_to_wall * 1.3);
+	rays->draw_start = -rays->wall_height / 2 + SCREEN_H / 2;
+	rays->draw_end = rays->wall_height / 2 + SCREEN_H / 2;
+	if (rays->draw_start < 0)
+		rays->draw_start = 0;
+	if (rays->draw_end >= SCREEN_H)
+		rays->draw_end = SCREEN_H - 1;
+}
+
+void	render_walls(t_mlx *mlx, t_rays *rays, int x, t_specs *specs)
+{
+	int		y;
+	char	*pixel;
+	int		d;
+
+	start_variables(rays);
+	calc_texture(mlx, rays);
+	y = rays->draw_start - 1;
+	while (++y < rays->draw_end)
+	{
+		d = (y - SCREEN_H / 2 + rays->wall_height / 2) * rays->texture_height;
+		rays->tex_y = d / rays->wall_height;
+		pixel = mlx->addr[mlx->texture] + ((int)(rays->tex_y)
+				* mlx->line_length[mlx->texture] + rays->tex_x
+				* (mlx->bpp[mlx->texture] / 8));
+		my_mlx_pixel_put(mlx, x, y, *(unsigned int *)pixel);
+	}
+	y = rays->draw_end - 1;
+	while (++y < SCREEN_H)
+		my_mlx_pixel_put(mlx, x, y, specs->floor_color);
+	y = -1;
+	while (++y < rays->draw_start)
+		my_mlx_pixel_put(mlx, x, y, specs->ceil_color);
+}
+
 void	launch_rays(t_player *player, t_map *map, t_rays *rays, float angle)
 {
-	// print2d_array(map->map2d);
 	rays->x = player->player_x;
 	rays->y = player->player_y;
 	if (angle >= PI + (PI / 2))
 	{
 		angle = 2 * PI - angle;
-		// printf("angle1: %f\n", (angle * 180.0 / PI));
 		vertical_angle(map, rays, angle, 1);
 		horizontal_angle(map, rays, angle, 1);
 	}
 	else if (angle < PI / 2)
 	{
-		// printf("angle2: %f\n", (angle * 180.0 / PI));
 		vertical_angle(map, rays, angle, 2);
 		horizontal_angle(map, rays, angle, 2);
 	}
 	else if (angle >= (PI / 2) && angle < PI)
 	{
 		angle = PI - angle;
-		// printf("angle3: %f\n", (angle * 180.0 / PI));
 		vertical_angle(map, rays, angle, 3);
 		horizontal_angle(map, rays, angle, 3);
 	}
 	else if (angle >= PI && angle < PI + PI / 2)
 	{
 		angle = angle - PI;
-		// printf("angle4: %f\n", (angle * 180.0 / PI));
 		vertical_angle(map, rays, angle, 4);
 		horizontal_angle(map, rays, angle, 4);
 	}
 }
 
+void	check_box_v(t_rays *rays, t_map *map, int quarter)
+{
+	if (quarter == 1)
+	{
+		rays->hit_v = rays->y - rays->a;
+		rays->box = map->map2d[(int)(rays->hit_v)][(int)(rays->x + rays->b)];
+	}
+	else if (quarter == 2)
+	{
+		rays->hit_v = rays->y + rays->a;
+		rays->box = map->map2d[(int)(rays->hit_v)][(int)(rays->x + rays->b)];
+	}
+	else if (quarter == 3)
+	{
+		rays->hit_v = rays->y + rays->a;
+		rays->box = map->map2d[(int)(rays->hit_v)][(int)(rays->x - rays->b
+				- 1)];
+	}
+	else if (quarter == 4)
+	{
+		rays->hit_v = rays->y - rays->a;
+		rays->box = map->map2d[(int)(rays->hit_v)][(int)(rays->x - rays->b
+				- 1)];
+	}
+}
+
 void	vertical_angle(t_map *map, t_rays *rays, float angle, int quarter)
 {
-	char	box;
-
-	// printf("ENTERING: vertical check\n");
+	if (quarter == 3 || quarter == 4)
+		rays->wall_direction_v = 'W';
+	else
+		rays->wall_direction_v = 'E';
 	if (fabs(angle) < EPSILON || fabs(angle - M_PI_2) < EPSILON || fabs(angle
 			- M_PI) < EPSILON || fabs(angle - (3 * M_PI_2)) < EPSILON)
-	{
-		rays->vertical_distance = rays->vertical_distance;
 		return ;
-	}
 	rays->b = 0.5;
 	while (1)
 	{
 		rays->vertical_distance = rays->b / cos(angle);
 		rays->a = sin(angle) * rays->vertical_distance;
-		/*printf("Vertical: /\\- A: %f, B: %f, C: %f\n", rays->a, rays->b,
-			rays->vertical_distance);*/
-		// printf("2V values check: %d y: %d\n", (int)(rays->x + rays->b),
-		//(int)(rays->y + rays->a));
-		if (quarter == 1)
-		{
-			if ((int)(rays->y - rays->a) < 0 || (int)(rays->x
-					+ rays->b) > map->map_width)
-				return ;
-			rays->wall_direction_v = 'E';
-			rays->wall_hit_v = rays->y - rays->a;
-			// printf("values check  original X: %d Y:%d\n", (int)rays->x,
-			//(int)rays->y);
-			/*printf("1V values check: +++++ %d y: %d\n", (int)(rays->x
-					- rays->a), (int)(rays->y + rays->b));*/
-			box = map->map2d[(int)(rays->y - rays->a)][(int)(rays->x
-					+ rays->b)];
-		}
-		else if (quarter == 2)
-		{
-			if ((int)(rays->y + rays->a) >= map->map_height || (int)(rays->x
-					+ rays->b) > map->map_width)
-				return ;
-			rays->wall_hit_v = rays->y + rays->a;
-			rays->wall_direction_v = 'E';
-			// printf("check x: %f, check y: %f\n", rays->x, rays->y);
-			// printf("---------------im checking the field: x: %d y: %d\n",
-			//(int)(rays->x + rays->a), (int)(rays->y + rays->b) + 1);
-			box = map->map2d[(int)(rays->y + rays->a)][(int)(rays->x
-					+ rays->b)];
-		}
-		else if (quarter == 3)
-		{
-			if ((int)(rays->y + rays->a) >= map->map_height || (int)(rays->x
-					- rays->b - 1) < 0)
-				return ;
-			rays->wall_hit_v = rays->y + rays->a;
-			rays->wall_direction_v = 'W';
-			box = map->map2d[(int)(rays->y + rays->a)][(int)(rays->x - rays->b
-					- 1)];
-		}
-		else if (quarter == 4)
-		{
-			if ((int)(rays->y - rays->a) < 0 || (int)(rays->x - rays->b
-					- 1) < 0)
-				return ;
-			rays->wall_hit_v = rays->y - rays->a;
-			rays->wall_direction_v = 'W';
-			// printf("-vetical--------------im checking the field: x: %d y:
-			//%d\n",
-			//(int)(rays->x - rays->a), (int)(rays->y - rays->b - 1) + 1);
-			box = map->map2d[(int)(rays->y - rays->a)][(int)(rays->x - rays->b
-					- 1)];
-		}
-		if (box == '1')
+		if ((quarter == 1 && (((int)(rays->y - rays->a) < 0 || (int)(rays->x
+							+ rays->b) > map->map_width))) || (quarter == 2
+				&& ((int)(rays->y + rays->a) >= map->map_height || (int)(rays->x
+						+ rays->b) > map->map_width)) || (quarter == 3
+				&& ((int)(rays->y + rays->a) >= map->map_height || (int)(rays->x
+						- rays->b - 1) < 0)) || (quarter == 4 && ((int)(rays->y
+						- rays->a) < 0 || (int)(rays->x - rays->b - 1) < 0)))
+			return ;
+		check_box_v(rays, map, quarter);
+		if (rays->box == '1')
 			break ;
 		rays->b++;
+	}
+}
+void	check_box_h(t_rays *rays, t_map *map, int quarter)
+{
+	if (quarter == 1)
+	{
+		rays->hit_h = rays->x + rays->b;
+		rays->box = map->map2d[(int)(rays->y - rays->a
+				- 1)][(int)(rays->hit_h)];
+	}
+	else if (quarter == 2)
+	{
+		rays->hit_h = rays->x + rays->b;
+		rays->box = map->map2d[(int)(rays->y + rays->a)][(int)(rays->hit_h)];
+	}
+	else if (quarter == 3)
+	{
+		rays->hit_h = rays->x - rays->b;
+		rays->box = map->map2d[(int)(rays->y + rays->a)][(int)(rays->hit_h)];
+	}
+	else if (quarter == 4)
+	{
+		rays->hit_h = rays->x - rays->b;
+		rays->box = map->map2d[(int)(rays->y - rays->a
+				- 1)][(int)(rays->hit_h)];
 	}
 }
 
 void	horizontal_angle(t_map *map, t_rays *rays, float angle, int quarter)
 {
-	char	box;
-
-	rays->a = 0.5;
+	if (quarter == 1 || quarter == 4)
+		rays->wall_direction_h = 'N';
+	else
+		rays->wall_direction_h = 'S';
+	rays->a = -0.5;
 	if (fabs(angle) < EPSILON || fabs(angle - M_PI_2) < EPSILON || fabs(angle
 			- M_PI) < EPSILON || fabs(angle - (3 * M_PI_2)) < EPSILON)
-	{
-		rays->horizontal_distance = rays->horizontal_distance;
 		return ;
-	}
-	// printf("ENTERING: horizontal check\n");
-	while (1)
+	while (++rays->a > 0)
 	{
 		rays->horizontal_distance = rays->a / sin(angle);
 		rays->b = cos(angle) * rays->horizontal_distance;
-		// printf("H--- checking A: %f, B: %f, C: %f\n", rays->a, rays->b,
-		//	rays->horizontal_distance);
-		if (quarter == 1)
-		{
-			if ((int)(rays->y - rays->a - 1) < 0 || (int)(rays->x
-					+ rays->b) > map->map_width)
-				return ;
-			rays->wall_direction_h = 'N';
-			rays->wall_hit_h = rays->x + rays->b;
-			/*printf("1H checking the fields: %d y: %d\n", (int)(rays->x
-					- rays->a), (int)(rays->y + rays->b + 1));
-			printf("rays->x: %f, rays->y: %f\n", rays->x, rays->y);*/
-			box = map->map2d[(int)(rays->y - rays->a - 1)][(int)(rays->x
-					+ rays->b)];
-		}
-		else if (quarter == 2)
-		{
-			if ((int)(rays->y + rays->a) >= map->map_height || (int)(rays->x
-					+ rays->b) > map->map_width)
-			{
-				return ;
-			}
-			rays->wall_hit_h = rays->x + rays->b;
-			rays->wall_direction_h = 'S';
-			// printf("2Horizontal values check ++ : x:%d y: %d\n",
-			//((int)(rays->x
-			//+ rays->a + 0.5)), (int)(rays->y + rays->b));
-			// printf("original X: %d, Y: %d\n", rays->x, rays->y);
-			box = map->map2d[(int)(rays->y + rays->a)][(int)(rays->x
-					+ rays->b)];
-		}
-		else if (quarter == 3)
-		{
-			if ((int)(rays->y + rays->a) > map->map_height || (int)(rays->x
-					- rays->b < 0))
-				return ;
-			rays->wall_hit_h = rays->x - rays->b;
-			rays->wall_direction_h = 'S';
-			box = map->map2d[(int)(rays->y + rays->a)][(int)(rays->x
-					- rays->b)];
-		}
-		else if (quarter == 4)
-		{
-			if ((int)(rays->y - rays->a - 1) < 0 || (int)(rays->x
-					- rays->b) > map->map_width)
-				return ;
-			rays->wall_hit_h = rays->x - rays->b;
-			rays->wall_direction_h = 'N';
-			/*printf("--horizontal-------------im checking the field: x: %d y:
-				%d\n", (int)(rays->x - rays->a - 1), (int)(rays->y
-					- rays->b));*/
-			box = map->map2d[(int)(rays->y - rays->a - 1)][(int)(rays->x
-					- rays->b)];
-		}
-		if (box == '1')
-		{
-			// printf("box: %c\n", box);
-			// printf("----************************-----horizontal-yes!!!!!!------\n");
+		if ((quarter == 1 && ((int)(rays->y - rays->a - 1) < 0 || (int)(rays->x
+						+ rays->b) > map->map_width)) || (quarter == 2
+				&& ((int)(rays->y + rays->a) >= map->map_height || (int)(rays->x
+						+ rays->b) > map->map_width)) || (quarter == 3
+				&& ((int)(rays->y + rays->a) > map->map_height || (int)(rays->x
+						- rays->b) < 0)) || (quarter == 4 && ((int)(rays->y
+						- rays->a - 1) < 0 || (int)(rays->x
+						- rays->b) > map->map_width)))
+			return ;
+		check_box_h(rays, map, quarter);
+		if (rays->box == '1')
 			break ;
-		}
-		rays->a++;
 	}
-	// printf("exiting horizontal check, rays->c: %f\n",
-	// rays->horizontal_distance);
 }

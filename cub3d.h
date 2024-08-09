@@ -138,8 +138,15 @@ typedef struct s_rays
 	char			*rgb_floor;
 	char			*rgb_ceil;
 	float			wall_hit;
-	float			wall_hit_v;
-	float			wall_hit_h;
+	float			hit_v;
+	float			hit_h;
+	int draw_start;
+	int draw_end;
+	int texture_height;
+	int wall_height;
+	int tex_y;
+	int tex_x;
+	int box;
 
 }					t_rays;
 
@@ -188,6 +195,8 @@ void				print_and_exit_map(char *str, t_map *map, char **line);
 int					key_hook(int keycode, t_cub *cub);
 void				get_map_parameters(t_map *map, char **array);
 void				fix_fisheye(float *distance, int i);
+//void				fix_fisheye(float *distance, int i);
+
 // checks
 void				first_check(int argc, char *argv[]);
 void				check_map_path(char *path);
@@ -216,7 +225,6 @@ void				horizontal_angle(t_map *map, t_rays *rays, float angle,
 						int quarter);
 void				vertical_angle(t_map *map, t_rays *rays, float angle,
 						int quarter);
-// void	change_rgb_to_hex(t_specs *specs, t_rgb *rgb, char **hash_line);
-// void	loop_rbg(char *temp, char **spec, t_type *type);
 void				change_rgb_to_hex(int *color, t_rgb *rgb);
+void	update_rays_values(t_rays *rays);
 #endif

@@ -1,19 +1,22 @@
 R  1500 1000
 
-NO assets/posters.xpm
-SO assets/mountains1.xpm
-WE assets/cube.xpm
-EA assets/opt1-copy.xpm
+//NO assets/posters.xpm
+//SO assets/mountains1.xpm
+//WE assets/border.xpm
+//EA assets/opt1-copy.xpm
+
+NO assets/north100x.xpm
+SO assets/south100x.xpm
+WE assets/east100x.xpm
+EA assets/east100x.xpm
 
 C  179, 229, 227
  
 F 175, 161, 165
-1111111111111
-1000001000001
-1000000000001
-1000000000001
-100S000000001
-1000000000001
-1000000000001
-1000000000001
-1111111111111
+11111111111
+10000000001
+100E0000001
+10000000001
+10000000001
+11111111111
+
