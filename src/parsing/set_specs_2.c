@@ -6,7 +6,7 @@
 /*   By: eprzybyl <eprzybyl@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 14:07:09 by eprzybyl          #+#    #+#             */
-/*   Updated: 2024/08/20 14:09:14 by eprzybyl         ###   ########.fr       */
+/*   Updated: 2024/08/20 18:20:09 by eprzybyl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,6 @@ int	rgb_check(char *rgb, t_specs *specs)
 	i = 0;
 	while (rgb[i] != '\0')
 		i++;
-	printf("rgb check : %s i : %d, \n", rgb, i);
 	if (i == 0 || i > 3 || (i == 1 && (rgb[0] < '0' || rgb[0] > '9')) || (i == 2
 			&& (rgb[0] < '0' || rgb[0] > '9' || rgb[1] < '0' || rgb[1] > '9'))
 		|| (i == 3 && rgb[0] == '1' && (rgb[1] < '0' || rgb[1] > '9'

@@ -6,7 +6,7 @@
 /*   By: eprzybyl <eprzybyl@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 14:07:09 by eprzybyl          #+#    #+#             */
-/*   Updated: 2024/08/20 14:13:04 by eprzybyl         ###   ########.fr       */
+/*   Updated: 2024/08/20 18:36:08 by eprzybyl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ void	parse_cub_file_specs(char *path, t_specs *specs, t_type *type)
 		specs->rows++;
 	}
 	free(line);
-	printf("check specs rows %d\n", specs->rows);
 }
 
 void	check_line2(char *line, t_specs *specs, int *flag)
@@ -73,7 +72,7 @@ void	check_line2(char *line, t_specs *specs, int *flag)
 		*flag = 1;
 	if (*flag == 1 && (line[i] != '1') && (line[i] != '\n')
 		&& (line[i] != '\0'))
-		print_and_exit_specs("Error: map error 3.", specs);
+		print_and_exit_specs("Error: map error.", specs);
 }
 
 void	check_line(char *line, t_specs *specs, t_type *type)

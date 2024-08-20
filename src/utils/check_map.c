@@ -6,7 +6,7 @@
 /*   By: eprzybyl <eprzybyl@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 14:55:29 by eprzybyl          #+#    #+#             */
-/*   Updated: 2024/08/20 14:55:55 by eprzybyl         ###   ########.fr       */
+/*   Updated: 2024/08/20 15:20:49 by eprzybyl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ bool	check_field(char c)
 	}
 	return (false);
 }
+
 bool	space_check(char c, int left)
 {
 	if (c == 'N' || c == 'S' || c == 'W' || c == 'E')
@@ -96,30 +97,4 @@ bool	space_check(char c, int left)
 		return (true);
 	}
 	return (false);
-}
-
-void	find_player(char **array, int *i, int *j, t_map *map)
-{
-	t_player *player;
-	player = get_player();
-	while (array[*i] != NULL)
-	{
-		while (array[*i][*j] != '\0')
-		{
-			if (array[*i][*j] == 'E')
-				player->facing = 0;
-			else if (array[*i][*j] == 'N')
-				player->facing = PI + (PI / 2);
-			else if (array[*i][*j] == 'S')
-				player->facing = PI / 2;
-			else if (array[*i][*j] == 'W')
-				player->facing = PI;
-			if (player->facing != -1)
-				return ;
-			(*j)++;
-		}
-		*j = 0;
-		(*i)++;
-	}
-	print_and_exit_map("Error: player not found.", map, NULL);
 }

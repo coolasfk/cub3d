@@ -25,14 +25,16 @@ SRC = main.c \
 	  src/utils/utils.c \
 	  src/parsing/set_specs.c \
 	  src/parsing/set_map.c \
-	  src/utils/printing_checks.c \
 	  src/utils/clean_exit.c \
 	  src/utils/check_map.c \
 	  src/render/render.c \
 	  src/utils/rgb_to_hex.c \
 	  src/render/move.c \
 	  src/parsing/set_map_2.c \
-	  src/parsing/set_specs_2.c
+	  src/parsing/set_specs_2.c \
+	  src/render/move_2.c \
+	  src/render/render_2.c \
+	  src/render/render_3.c
 
 DODIR = dofile
 

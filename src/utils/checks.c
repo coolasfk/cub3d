@@ -6,7 +6,7 @@
 /*   By: eprzybyl <eprzybyl@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 14:34:03 by eprzybyl          #+#    #+#             */
-/*   Updated: 2024/08/20 14:34:21 by eprzybyl         ###   ########.fr       */
+/*   Updated: 2024/08/20 15:27:44 by eprzybyl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,13 @@ void	check_map_path(char *path)
 
 void	check_players(char **array, t_map *map)
 {
-	int i = 0;
-	int j = 0;
-	int count = 0;
+	int	i;
+	int	j;
+	int	count;
+
+	i = 0;
+	j = 0;
+	count = 0;
 	while (array[i] != NULL)
 	{
 		while (array[i][j] != '\0')
@@ -48,7 +52,33 @@ void	check_players(char **array, t_map *map)
 		j = 0;
 		i++;
 	}
-	printf("number of players %d\n", count);
 	if (count != 1)
 		print_and_exit_map("Error: wrong number of players.", map, NULL);
+}
+
+void	find_player(char **array, int *i, int *j, t_map *map)
+{
+	t_player	*player;
+
+	player = get_player();
+	while (array[*i] != NULL)
+	{
+		while (array[*i][*j] != '\0')
+		{
+			if (array[*i][*j] == 'E')
+				player->fc = 0;
+			else if (array[*i][*j] == 'N')
+				player->fc = PI + (PI / 2);
+			else if (array[*i][*j] == 'S')
+				player->fc = PI / 2;
+			else if (array[*i][*j] == 'W')
+				player->fc = PI;
+			if (player->fc != -1)
+				return ;
+			(*j)++;
+		}
+		*j = 0;
+		(*i)++;
+	}
+	print_and_exit_map("Error: player not found.", map, NULL);
 }

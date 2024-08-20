@@ -6,7 +6,7 @@
 /*   By: eprzybyl <eprzybyl@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 14:00:02 by eprzybyl          #+#    #+#             */
-/*   Updated: 2024/08/20 14:00:36 by eprzybyl         ###   ########.fr       */
+/*   Updated: 2024/08/20 18:42:28 by eprzybyl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ t_map	*set_map(char *path)
 	map->map2d = allocate_memory(specs->rows, ARRAY2D, type);
 	map->check = allocate_memory(specs->rows, ARRAY2D, type);
 	parse_cub_file_map(path, map, type);
-	print2d_array(map->map2d);
 	check_players(map->map2d, map);
 	final_map_check_dfs(map->map2d, map);
 	get_map_parameters(map, map->map2d);
@@ -103,8 +102,7 @@ void	build_map2d(char *line, t_map *map, t_type *type, int *index)
 	{
 		if ((line[i] != 32) && !(line[i] >= 9 && line[i] <= 13)
 			&& (line[i] != 'N') && (line[i] != 'S') && (line[i] != 'E')
-			&& (line[i] != 'W') && (line[i] != '1') && (line[i] != '0')
-			&& (line[i] != '2'))
+			&& (line[i] != 'W') && (line[i] != '1') && (line[i] != '0'))
 			print_and_exit_map("Error: map contains wrong characters.", map,
 				&line);
 	}

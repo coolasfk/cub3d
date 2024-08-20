@@ -58,9 +58,9 @@ typedef struct s_type
 typedef struct s_player
 {
 	t_type			type;
-	float			facing;
-	float			player_x;
-	float			player_y;
+	float			fc;
+	float			plr_x;
+	float			plr_y;
 }					t_player;
 
 typedef struct s_rgb
@@ -83,7 +83,7 @@ typedef struct s_map
 
 typedef struct s_specs
 {
-	int k;
+	int				k;
 	t_type			type;
 	char			*floor_spec;
 	char			*ceil_spec;
@@ -144,7 +144,7 @@ typedef struct s_rays
 	int				draw_start;
 	int				draw_end;
 	int				texture_height;
-	float				wall_height;
+	float			wall_height;
 	int				tex_y;
 	int				tex_x;
 	int				box;
@@ -190,7 +190,6 @@ t_mlx				*init_mlx(t_mlx *mlx_struct, t_cub *cub);
 
 // utils
 void				*allocate_memory(int size, int alloc_type, t_type *ret);
-void				print2d_array(char **array);
 void				print_and_exit_specs(char *str, t_specs *specs);
 void				print_and_exit_map(char *str, t_map *map, char **line);
 int					key_hook(int keycode, t_cub *cub);
@@ -215,6 +214,7 @@ bool				check_field(char c);
 void				check_players(char **array, t_map *map);
 // exit
 int					end_game(t_cub *cub);
+void	free_rgb(t_specs *specs);
 // render
 int					render(t_cub *cub);
 void				launch_rays(t_player *player, t_map *map, t_rays *rays,
@@ -228,4 +228,12 @@ void				vertical_angle(t_map *map, t_rays *rays, float angle,
 						int quarter);
 void				change_rgb_to_hex(int *color, t_rgb *rgb);
 void				update_rays_values(t_rays *rays, int i);
+void				calc_texture(t_mlx *mlx, t_rays *rays);
+// move
+void				rotate_player(int keycode, t_cub *cub);
+void				move_player_right(t_cub *cub);
+void				move_player_backward(t_cub *cub);
+void				move_player_left(t_cub *cub);
+void				move_player_forward(t_cub *cub);
+
 #endif

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   init.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: eprzybyl <eprzybyl@student.42lausanne.c    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/08/20 15:20:58 by eprzybyl          #+#    #+#             */
+/*   Updated: 2024/08/20 15:21:00 by eprzybyl         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 
 t_cub	*set_cub(char *argv[])
@@ -37,7 +49,7 @@ t_player	*set_player(void)
 	if (player)
 		return (player);
 	player = allocate_memory(0, PLAYER, type);
-	player->facing = -1;
+	player->fc = -1;
 	return (player);
 }
 
@@ -52,6 +64,6 @@ t_player	*get_player(void)
 
 void	give_player_values(int i, int j, t_player *player)
 {
-	player->player_y = i + 0.5;
-	player->player_x = j + 0.5;
+	player->plr_y = i + 0.5;
+	player->plr_x = j + 0.5;
 }

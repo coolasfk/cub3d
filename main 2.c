@@ -9,8 +9,8 @@
 int	main(void)
 {
 	int	i;
-	int	player_x;
-	int	player_y;
+	int	plr_x;
+	int	plr_y;
 	int	ray;
 	int	start_direction_angles;
 	int	main_ray;
@@ -41,7 +41,7 @@ int	change_direction(int old_direction)
 	return (new_main_direction);
 }
 
-int	throw_ray(int player_x, int player_y, int angle_degrees)
+int	throw_ray(int plr_x, int plr_y, int angle_degrees)
 {
 	int map[5][5] = 
     {{1, 1, 1, 1, 1}, 

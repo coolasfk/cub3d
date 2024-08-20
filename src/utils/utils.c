@@ -6,7 +6,7 @@
 /*   By: eprzybyl <eprzybyl@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 14:28:55 by eprzybyl          #+#    #+#             */
-/*   Updated: 2024/08/20 14:28:57 by eprzybyl         ###   ########.fr       */
+/*   Updated: 2024/08/20 15:22:10 by eprzybyl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	*allocate_memory(int size, int alloc_type, t_type *ret)
 		ret = malloc(sizeof(t_map));
 	else if (alloc_type == ARRAY2D)
 		ret = malloc(sizeof(char *) * size);
-    else if (alloc_type == CUB)
+	else if (alloc_type == CUB)
 		ret = malloc(sizeof(t_cub));
 	else if (alloc_type == RGB)
 		ret = malloc(sizeof(t_rgb));
@@ -33,6 +33,6 @@ void	*allocate_memory(int size, int alloc_type, t_type *ret)
 	else if (alloc_type == RAYS)
 		ret = malloc(sizeof(t_rays));
 	if (!ret)
-	print_and_exit_map("Error: cannot allocate memory.", NULL, NULL);
+		print_and_exit_map("Error: cannot allocate memory.", NULL, NULL);
 	return (ret);
 }
