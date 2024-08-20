@@ -6,7 +6,7 @@
 /*   By: eprzybyl <eprzybyl@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/09 16:29:56 by eprzybyl          #+#    #+#             */
-/*   Updated: 2024/08/09 17:30:41 by eprzybyl         ###   ########.fr       */
+/*   Updated: 2024/08/20 14:28:00 by eprzybyl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,7 @@ int	render(t_cub *cub)
 		if (angle >= 2 * PI)
 			angle -= 2 * PI;
 		launch_rays(cub->player, cub->map, cub->rays, angle);
-		update_rays_values(cub->rays);
-		fix_fisheye(&cub->rays->distance_to_wall, i);
+		update_rays_values(cub->rays, i);
 		render_walls(cub->mlx, cub->rays, i, cub->specs);
 		angle += FOV / SCREEN_W;
 	}
@@ -40,19 +39,22 @@ int	render(t_cub *cub)
 	return (0);
 }
 
-void	update_rays_values(t_rays *rays)
+void	update_rays_values(t_rays *rays, int i)
 {
+	(void)i;
 	if (rays->horizontal_distance > rays->vertical_distance)
 	{
 		rays->distance_to_wall = rays->vertical_distance;
 		rays->wall_direction = rays->wall_direction_v;
 		rays->wall_hit = rays->hit_v;
+		fix_fisheye(&rays->distance_to_wall, i);
 	}
 	else
 	{
 		rays->distance_to_wall = rays->horizontal_distance;
 		rays->wall_direction = rays->wall_direction_h;
 		rays->wall_hit = rays->hit_h;
+		fix_fisheye(&rays->distance_to_wall, i);
 	}
 }
 
@@ -83,29 +85,27 @@ void	calc_texture(t_mlx *mlx, t_rays *rays)
 	if (rays->wall_direction == 'N')
 		mlx->texture = NORTH_TEX;
 	else if (rays->wall_direction == 'S')
-	{
 		mlx->texture = SOUTH_TEX;
-		rays->tex_x = mlx->width[mlx->texture] - ((int)((rays->wall_hit
-						- floor(rays->wall_hit)) * mlx->width[mlx->texture]));
-	}
 	else if (rays->wall_direction == 'E')
 		mlx->texture = EAST_TEX;
 	else if (rays->wall_direction == 'W')
-	{
 		mlx->texture = WEST_TEX;
-		rays->tex_x = mlx->width[mlx->texture] - ((int)((rays->wall_hit
-						- floor(rays->wall_hit)) * mlx->width[mlx->texture]));
-	}
 	if (mlx->texture != SOUTH_TEX && mlx->texture != WEST_TEX)
 		rays->tex_x = (int)((rays->wall_hit - floor(rays->wall_hit))
 				* mlx->width[mlx->texture]);
+	else
+	{
+		rays->tex_x = mlx->width[mlx->texture] - ((int)((rays->wall_hit
+						- floor(rays->wall_hit)) * mlx->width[mlx->texture]));
+	}
 	rays->texture_height = mlx->height[mlx->texture];
 	rays->tex_y = 0;
 }
 
-void	start_variables(t_rays *rays)
+void	start_variables(t_rays *rays, int x)
 {
-	rays->wall_height = (int)(PLANE / rays->distance_to_wall * 1.3);
+	rays->wall_height = (int)(PLANE / rays->distance_to_wall * 2.3);
+	(void)x;
 	rays->draw_start = -rays->wall_height / 2 + SCREEN_H / 2;
 	rays->draw_end = rays->wall_height / 2 + SCREEN_H / 2;
 	if (rays->draw_start < 0)
@@ -120,7 +120,7 @@ void	render_walls(t_mlx *mlx, t_rays *rays, int x, t_specs *specs)
 	char	*pixel;
 	int		d;
 
-	start_variables(rays);
+	start_variables(rays, x);
 	calc_texture(mlx, rays);
 	y = rays->draw_start - 1;
 	while (++y < rays->draw_end)

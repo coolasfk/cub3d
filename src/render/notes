@@ -1,7 +1,0 @@
-	if (mirror)
-		get_x = tex->width - k * tex->width;
-	else
-		get_x = k * tex->width;
-	d = (float)cub->wall.height / (float)tex->height;
-	get_y = (cub->wall.put_y - cub->wall.start) / d;
-	color = my_mlx_pixel_get(tex, get_x, get_y);

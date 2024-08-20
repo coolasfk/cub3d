@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   checks.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: eprzybyl <eprzybyl@student.42lausanne.c    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/08/20 14:34:03 by eprzybyl          #+#    #+#             */
+/*   Updated: 2024/08/20 14:34:21 by eprzybyl         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 
 void	first_check(int argc, char *argv[])
@@ -18,7 +30,6 @@ void	check_map_path(char *path)
 		exit(1);
 	}
 }
-
 
 void	check_players(char **array, t_map *map)
 {

@@ -1,5 +1,16 @@
-#include "cub3d.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   set_map.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: eprzybyl <eprzybyl@student.42lausanne.c    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/08/20 14:00:02 by eprzybyl          #+#    #+#             */
+/*   Updated: 2024/08/20 14:00:36 by eprzybyl         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
+#include "cub3d.h"
 
 t_map	*set_map(char *path)
 {
@@ -67,9 +78,9 @@ void	check_tracker(char *line, int *tracker)
 		&& line[i] != '\0')
 		i++;
 	if ((line[i] == 'N' && line[i + 1] == 'O') || (line[i] == 'S' && line[i
-			+ 1] == 'O') || (line[i] == 'W' && line[i + 1] == 'E')
+				+ 1] == 'O') || (line[i] == 'W' && line[i + 1] == 'E')
 		|| (line[i] == 'E' && line[i + 1] == 'A') || (line[i] == 'F' && line[i
-			+ 1] == 32) || (line[i] == 'C' && line[i + 1] == 32))
+				+ 1] == 32) || (line[i] == 'C' && line[i + 1] == 32))
 	{
 		(*tracker)++;
 	}
@@ -102,45 +113,4 @@ void	build_map2d(char *line, t_map *map, t_type *type, int *index)
 	free(line);
 	line = NULL;
 	(*index)++;
-}
-
-char	*trim_line(char *line, t_type *type)
-{
-	char	*new;
-	int		count_trim;
-	size_t	i;
-	int		len;
-
-	i = 0;
-	count_trim = 0;
-	len = ft_strlen(line);
-	new = allocate_memory(ft_strlen(line), ARRAY, type);
-	while ((line[len - 1] == 32 || (line[len - 1] >= 9 && line[len - 1] <= 13))
-		|| (line[len - 1] == '\n'))
-	{
-		count_trim++;
-		len--;
-	}
-	while (i < ft_strlen(line) - count_trim && line[i] != '\n')
-	{
-		new[i] = line[i];
-		i++;
-	}
-	return (new);
-}
-
-void	get_map_parameters(t_map *map, char **array)
-{
-	int y = 0;
-	map->map_height = 0;
-	map->map_width = 0;
-	while (array[map->map_height] != NULL)
-	{
-		while (array[map->map_height][y] != '\0')
-			y++;
-		if (y > map->map_width)
-			map->map_width = y;
-		y = 0;
-		map->map_height++;
-	}
 }

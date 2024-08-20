@@ -12,7 +12,7 @@
 
 # define SCREEN_H 768
 # define SCREEN_W 1024
-# define FOV (PI / 2)
+# define FOV (PI / 4)
 # define WALL 3.0f
 # define GRID_SIZE 64
 # define PLANE 512
@@ -83,6 +83,7 @@ typedef struct s_map
 
 typedef struct s_specs
 {
+	int k;
 	t_type			type;
 	char			*floor_spec;
 	char			*ceil_spec;
@@ -140,13 +141,13 @@ typedef struct s_rays
 	float			wall_hit;
 	float			hit_v;
 	float			hit_h;
-	int draw_start;
-	int draw_end;
-	int texture_height;
-	int wall_height;
-	int tex_y;
-	int tex_x;
-	int box;
+	int				draw_start;
+	int				draw_end;
+	int				texture_height;
+	float				wall_height;
+	int				tex_y;
+	int				tex_x;
+	int				box;
 
 }					t_rays;
 
@@ -195,7 +196,7 @@ void				print_and_exit_map(char *str, t_map *map, char **line);
 int					key_hook(int keycode, t_cub *cub);
 void				get_map_parameters(t_map *map, char **array);
 void				fix_fisheye(float *distance, int i);
-//void				fix_fisheye(float *distance, int i);
+// void				fix_fisheye(float *distance, int i);
 
 // checks
 void				first_check(int argc, char *argv[]);
@@ -226,5 +227,5 @@ void				horizontal_angle(t_map *map, t_rays *rays, float angle,
 void				vertical_angle(t_map *map, t_rays *rays, float angle,
 						int quarter);
 void				change_rgb_to_hex(int *color, t_rgb *rgb);
-void	update_rays_values(t_rays *rays);
+void				update_rays_values(t_rays *rays, int i);
 #endif

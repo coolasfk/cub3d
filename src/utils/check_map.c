@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   check_map.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: eprzybyl <eprzybyl@student.42lausanne.c    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/08/20 14:55:29 by eprzybyl          #+#    #+#             */
+/*   Updated: 2024/08/20 14:55:55 by eprzybyl         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 
 void	final_map_check_dfs(char **array, t_map *map)
@@ -11,8 +23,8 @@ void	final_map_check_dfs(char **array, t_map *map)
 	j = 0;
 	find_player(array, &i, &j, map);
 	check_borders(array, i, j, map->check);
-    give_player_values(i, j, player);
-    map->map2d[i][j] = '0';
+	give_player_values(i, j, player);
+	map->map2d[i][j] = '0';
 }
 
 int	check_borders(char **arr, int i, int j, char **check)
@@ -24,7 +36,7 @@ int	check_borders(char **arr, int i, int j, char **check)
 	}
 	if (!is_all_good(arr, i, j))
 	{
-		printf("Error: map has gaps or is not surrounded by 1 i: %d, j:%d, line:%s\n", i, j, arr[i]);
+		printf("Error: map has gaps or is not surrounded by 1.\n");
 		exit(1);
 	}
 	check[i][j] = 9;
@@ -37,9 +49,9 @@ int	check_borders(char **arr, int i, int j, char **check)
 
 bool	is_all_good(char **arr, int i, int j)
 {
-    if (i == 0 && ((arr[i][j] != '1' && !space_check(arr[i][j], 0))))
+	if (i == 0 && ((arr[i][j] != '1' && !space_check(arr[i][j], 0))))
 	{
-        printf("problem detected, %c\n", arr[i][j]);
+		printf("Error: map is invalid, %c\n", arr[i][j]);
 		return (false);
 	}
 	if (check_field(arr[i][j]) && i == 0 && (j == 0 || space_check(arr[i][j
@@ -62,7 +74,7 @@ bool	is_all_good(char **arr, int i, int j)
 	}
 	return (true);
 }
-// Function to check if a cell is adjacent to an empty space
+
 bool	check_field(char c)
 {
 	if (c == 'N' || c == 'S' || c == 'W' || c == 'E' || c == '0')
@@ -97,9 +109,9 @@ void	find_player(char **array, int *i, int *j, t_map *map)
 			if (array[*i][*j] == 'E')
 				player->facing = 0;
 			else if (array[*i][*j] == 'N')
-				player->facing = PI + (PI/2);
+				player->facing = PI + (PI / 2);
 			else if (array[*i][*j] == 'S')
-				player->facing = PI/2;
+				player->facing = PI / 2;
 			else if (array[*i][*j] == 'W')
 				player->facing = PI;
 			if (player->facing != -1)

@@ -14,8 +14,6 @@ t_cub	*set_cub(char *argv[])
 	cub->specs = set_specs(argv[1]);
 	cub->map = set_map(argv[1]);
 	cub->player = get_player();
-	//mlx->width = 100;
-	//mlx->height = 100;
 	return (cub);
 }
 
