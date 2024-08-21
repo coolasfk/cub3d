@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cub3d.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: eprzybyl <eprzybyl@student.42lausanne.c    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/08/21 12:46:25 by eprzybyl          #+#    #+#             */
+/*   Updated: 2024/08/21 12:46:38 by eprzybyl         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef CUB3D_H
 # define CUB3D_H
 
@@ -214,7 +226,7 @@ bool				check_field(char c);
 void				check_players(char **array, t_map *map);
 // exit
 int					end_game(t_cub *cub);
-void	free_rgb(t_specs *specs);
+void				free_rgb(t_specs *specs);
 // render
 int					render(t_cub *cub);
 void				launch_rays(t_player *player, t_map *map, t_rays *rays,

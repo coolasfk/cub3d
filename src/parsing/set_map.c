@@ -6,7 +6,7 @@
 /*   By: eprzybyl <eprzybyl@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 14:00:02 by eprzybyl          #+#    #+#             */
-/*   Updated: 2024/08/20 18:42:28 by eprzybyl         ###   ########.fr       */
+/*   Updated: 2024/08/21 13:04:34 by eprzybyl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ void	build_map2d(char *line, t_map *map, t_type *type, int *index)
 		if ((line[i] != 32) && !(line[i] >= 9 && line[i] <= 13)
 			&& (line[i] != 'N') && (line[i] != 'S') && (line[i] != 'E')
 			&& (line[i] != 'W') && (line[i] != '1') && (line[i] != '0'))
-			print_and_exit_map("Error: map contains wrong characters.", map,
+			print_and_exit_map("Error: Your map is not valid.", map,
 				&line);
 	}
 	map->map2d[*index] = ft_strdup(line);

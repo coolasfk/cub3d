@@ -11,18 +11,13 @@ WE assets/border.xpm
 
 EA assets/opt1-copy.xpm
 
-//NO assets/north100x.xpm
-//SO assets/south100x.xpm
-//WE assets/east100x.xpm
-//EA assets/east100x.xpm
-
 
 C  179,       229, 227 
 F 175, 161, 165
 1111111111111
 1000000110001
-10000E0000001
-1000000000001
-1000000000001
+1000E00000001
+1000111000001
+1000001000001
 1111111111111
 

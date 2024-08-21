@@ -6,7 +6,7 @@
 /*   By: eprzybyl <eprzybyl@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 14:34:03 by eprzybyl          #+#    #+#             */
-/*   Updated: 2024/08/20 15:27:44 by eprzybyl         ###   ########.fr       */
+/*   Updated: 2024/08/21 12:50:14 by eprzybyl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,10 @@
 void	first_check(int argc, char *argv[])
 {
 	if (argc != 2)
+	{
+		printf("Error: Wrong number of arguments.\n");
 		exit(1);
+	}	
 	check_map_path(argv[1]);
 }
 

@@ -6,7 +6,7 @@
 /*   By: eprzybyl <eprzybyl@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 14:07:09 by eprzybyl          #+#    #+#             */
-/*   Updated: 2024/08/20 18:20:09 by eprzybyl         ###   ########.fr       */
+/*   Updated: 2024/08/21 12:58:05 by eprzybyl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,16 +53,16 @@ void	check_specs(t_specs *specs)
 	}
 	fd = open(specs->n_spec, O_RDONLY);
 	if (fd < 0)
-		print_and_exit_specs("Error: cannot open the file1.", specs);
+		print_and_exit_specs("Error: cannot open the north tex file.", specs);
 	fd = open(specs->s_spec, O_RDONLY);
 	if (fd < 0)
-		print_and_exit_specs("Error: cannot open the file2.", specs);
+		print_and_exit_specs("Error: cannot open the south tex file.", specs);
 	fd = open(specs->e_spec, O_RDONLY);
 	if (fd < 0)
-		print_and_exit_specs("Error: cannot open the file3.", specs);
+		print_and_exit_specs("Error: cannot open the east tex.", specs);
 	fd = open(specs->w_spec, O_RDONLY);
 	if (fd < 0)
-		print_and_exit_specs("Error: cannot open the file4.", specs);
+		print_and_exit_specs("Error: cannot open the west tex.", specs);
 }
 
 void	get_rgb(char **str, t_rgb **rgb, t_type *type, t_specs *specs)
