@@ -6,7 +6,7 @@
 /*   By: eprzybyl <eprzybyl@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 15:21:11 by eprzybyl          #+#    #+#             */
-/*   Updated: 2024/08/20 20:19:49 by eprzybyl         ###   ########.fr       */
+/*   Updated: 2024/08/21 12:43:11 by eprzybyl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,15 +55,6 @@ void	free_rgb(t_specs *specs)
 		free(ptr);
 	}
 }
-/*
-void	free_mlx_rgb(void)
-{
-	t_cub	*cub;
-
-	cub = get_cub();
-	free(cub->player);
-	free(cub->rays);
-}*/
 
 void	print_and_exit_map(char *str, t_map *map, char **line)
 {
@@ -91,4 +82,12 @@ void	print_and_exit_map(char *str, t_map *map, char **line)
 	if (line != NULL)
 		free(*line);
 	print_and_exit_specs(str, specs);
+}
+
+int	end_game(t_cub *cub)
+{
+	if (cub->mlx->win_ptr)
+		mlx_destroy_window(cub->mlx->mlx_ptr, cub->mlx->win_ptr);
+	exit(0);
+	return (0);
 }

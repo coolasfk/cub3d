@@ -1,6 +1,6 @@
 R  1500 1000
 
-NO ./   assets/posters.xpm
+NO assets/posters.xpm
 SO assets/mountains1.xpm
 WE assets/border.xpm
 
